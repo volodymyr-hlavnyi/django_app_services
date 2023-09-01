@@ -4,15 +4,5 @@ django==4.2.4
 # css bootstrap
 django-bootstrap-v5==1.0.11
 
-# For name generation.
-#faker==19.2.0
-
-#[Future functionality]
-# For pretty phone numbers
-# https://django-phonenumber-field.readthedocs.io/en/latest/
-
-# Installs phonenumbers minimal metadata
-#django-phonenumber-field[phonenumberslite]==7.1.0
-
-# Installs phonenumbers extended features (e.g. geocoding)
-#django-phonenumber-field[phonenumbers]==7.1.0
+# Upgrade syntax.
+pyupgrade==3.10.1

@@ -4,8 +4,6 @@
 # [code_style]-[BEGIN]
 # Pre-commit hook.
 pre-commit==3.3.3
-# Upgrade syntax.
-pyupgrade==3.10.1
 # Formatter. Apply codestyle.
 black==23.7.0
 # Check codestyle.
