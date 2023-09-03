@@ -1,16 +1,20 @@
-import datetime
+# import datetime
 
 from django.shortcuts import render
 
+import core.settings
+
 
 def home_page(request):
-    now = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
+    # now = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M:%S")
 
     return render(
         request=request,
         template_name="base/home_page.html",
         context={
-            "greetings_text": f"Hi, now is {now} in UTC.",
+            "greetings_text": f"DJANGO ENVIRONMENT: "
+            f" DEBUG={core.settings.DEBUG} "
+            f" ALLOWED_HOST={core.settings.ALLOWED_HOSTS} ",
             "title": "Django base project",
         },
     )
