@@ -1,0 +1,11 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+  <h1>Employers</h1>
+  <ul class="list-group">
+    {% for employer in employers %}
+      <li class="list-group-item">{{ employer.name }}</li>
+    {% endfor %}
+  </ul>
+  <a href="{% url 'create_employer' %}" class="btn btn-success mt-2">Add Employer</a>
+{% endblock %}

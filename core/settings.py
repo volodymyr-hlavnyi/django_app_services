@@ -32,7 +32,7 @@ SECRET_KEY = env.str(
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DJANGO__DEBUG", default=False)
+DEBUG = env.bool("DJANGO__DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("DJANGO__ALLOWED_HOSTS", default=[])
 if DEBUG:
