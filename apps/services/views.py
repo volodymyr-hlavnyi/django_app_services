@@ -15,7 +15,7 @@ def home(request):
 class ClientsCreateView(CreateView):
     model = Client
     fields = ("name",)
-    success_url = reverse_lazy("services:home")
+    success_url = reverse_lazy("services:client_list")
 
 
 class ClientListView(ListView):
