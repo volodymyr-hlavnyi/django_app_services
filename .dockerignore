@@ -8,3 +8,5 @@
 !requirements.txt
 !Makefile
 !docker/app/
+!requirements
+!.env

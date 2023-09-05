@@ -13,9 +13,10 @@ RUN useradd --system ${USER} && \
 RUN apt update && apt upgrade -y
 
 COPY --chown=${USER} requirements.txt requirements.txt
+COPY --chown=${USER} requirements requirements
 
 RUN pip install --upgrade pip && \
-    pip install --requirement requirements.txt
+    pip install --requirement requirements/production.txt
 
 COPY --chown=${USER} --chmod=555 ./docker/app/entrypoint.sh /entrypoint.sh
 COPY --chown=${USER} --chmod=555 ./docker/app/start.sh /start.sh

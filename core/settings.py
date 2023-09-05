@@ -9,24 +9,34 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import string
 from pathlib import Path
+
+import environ
+from django.utils.crypto import get_random_string
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 APPS_DIR = BASE_DIR.joinpath("apps")
 
+env = environ.FileAwareEnv()
+env.read_env(env_file=BASE_DIR.joinpath(".env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-$p1*sik(+%%93y)1iz5+$v&r3b8fn8$h_=xd8y-(hx+i8u1i6p"
+SECRET_KEY = env.str(
+    "DJANGO__SECRET_KEY", get_random_string(64, "".join([string.ascii_letters, string.digits, string.punctuation]))
+)
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DJANGO__DEBUG", default=False)
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0"]
+ALLOWED_HOSTS = env.list("DJANGO__ALLOWED_HOSTS", default=[])
+if DEBUG:
+    ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 
 
 # Application definition
