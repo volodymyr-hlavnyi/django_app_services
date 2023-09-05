@@ -1,0 +1,41 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+  <h1>Add Employer</h1>
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="form-group">
+      <label for="name">Employer Name:</label>
+      <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+
+    <div class="form-group">
+      <label for="project_details">Project Details:</label>
+      <textarea class="form-control" id="project_details" name="project_details" rows="4" required></textarea>
+    </div>
+
+    <div class="form-group">
+      <label for="work_type">Work Type:</label>
+      <select class="form-control" id="work_type" name="work_type" required>
+        <option value="Full-time">Full-time</option>
+        <option value="Part-time">Part-time</option>
+        <option value="Contract">Contract</option>
+        <option value="Freelance">Freelance</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="start_date">Start Date:</label>
+      <input type="date" class="form-control" id="start_date" name="start_date" required>
+    </div>
+
+    <div class="form-group">
+      <label for="end_date">End Date:</label>
+      <input type="date" class="form-control" id="end_date" name="end_date">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+  </form>
+  <a href="{% url 'employer_list' %}" class="btn btn-secondary mt-2">Back to Employers</a>
+{% endblock %}
