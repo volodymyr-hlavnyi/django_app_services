@@ -49,7 +49,7 @@ class Service(models.Model):
     date = models.DateField(blank=False, null=True)
     client = models.ForeignKey("Client", on_delete=models.CASCADE)
     kind_of_service = models.ForeignKey("KindOfService", on_delete=models.CASCADE)
-    time = models.DecimalField(blank=False, null=True)
+    time_hours = models.DecimalField(max_digits=4, decimal_places=2)
 
     created_at = models.DateTimeField(
         auto_now_add=True,
