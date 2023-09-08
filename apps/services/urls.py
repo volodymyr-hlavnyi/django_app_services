@@ -5,6 +5,8 @@ app_name = "services"
 
 urlpatterns = [
     path("list/", views.ClientListView.as_view(), name="client_list"),
+    path("/edit/<int:client_id>/", views.client_edit, name="client_edit"),
+    path("/delete/<int:client_id>/", views.client_delete, name="client_delete"),
     #
     path("list_kind/", views.KindOfServiceListView.as_view(), name="kindofservice_list"),
     # path("delete/<int:pk>/", views.ContactDeleteView.as_view(), name="contacts_delete"),
