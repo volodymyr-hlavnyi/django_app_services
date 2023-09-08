@@ -2,8 +2,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
+from apps.services.models import Client, KindOfService
 from apps.services.forms import ClientForm
-from apps.services.models import Client
 
 
 def home(request):
@@ -14,25 +14,26 @@ def home(request):
 def client_edit(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
             form.save()
-            return redirect('services:client_list')
+            return redirect("services:client_list")
     else:
         form = ClientForm(instance=client)
 
-    return render(request, 'services/client_edit.html', {'form': form, 'client': client})
+    return render(request, "services/client_edit.html", {"form": form, "client": client})
 
 
 def client_delete(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         client.delete()
-        return redirect('services:client_list')
+        return redirect("services:client_list")
 
-    return render(request, 'services/client_delete.html', {'client': client})
+    return render(request, "services/client_delete.html", {"client": client})
+
 
 class ClientsCreateView(CreateView):
     model = Client
@@ -44,3 +45,13 @@ class ClientListView(ListView):
     model = Client
     context_object_name = "client_list"
 
+
+class KindOfServiceListView(ListView):
+    model = KindOfService
+    context_object_name = "kindofservice_list"
+
+
+class KindOfServiceCreateView(CreateView):
+    model = KindOfService
+    fields = ("name",)
+    success_url = reverse_lazy("services:kindofservice_list")

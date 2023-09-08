@@ -1,0 +1,13 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+  <h1>Kind of services</h1>
+    <a href="{% url 'services:kindofservice_create' %}" class="btn btn-success mt-2">Add Kind of service</a>
+
+  <ul class="list-group">
+    {% for kind in kindofservice_list %}
+      <li class="list-group-item">{{ kind.name }}</li>
+    {% endfor %}
+  </ul>
+
+{% endblock %}
