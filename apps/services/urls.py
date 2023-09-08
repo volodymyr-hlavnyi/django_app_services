@@ -11,8 +11,8 @@ urlpatterns = [
     #
     path("list_kind/", views.KindOfServiceListView.as_view(), name="kindofservice_list"),
     path("create_kind/", views.KindOfServiceCreateView.as_view(), name="kindofservice_create"),
-    # path("delete/<int:pk>/", views.ContactDeleteView.as_view(), name="contacts_delete"),
-    # #
+    path("edit_kind/<int:kind_id>/", views.kindofservice_edit, name="kindofservice_edit"),
+    path("delete_kind/<int:kind_id>/", views.kindofservice_delete, name="kindofservice_delete"),
     # path("update/<int:pk>/", views.ContactUpdateView.as_view(), name="contacts_update"),
     # #
     # path("generate/", views.generate_contacts_view, name="contacts_generate"),

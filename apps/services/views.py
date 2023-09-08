@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
 from apps.services.models import Client, KindOfService, Service
-from apps.services.forms import ClientForm
+from apps.services.forms import ClientForm, KindOfServiceForm
 
 
 def home(request):
@@ -66,3 +66,25 @@ class ServiceCreateView(CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
+
+
+def kindofservice_delete(request, kind_id):
+    kind = get_object_or_404(KindOfService, id=kind_id)
+    if request.method == "POST":
+        kind.delete()
+        return redirect("services:kindofservice_list")
+    return render(request, "services/kindofservice_delete.html", {"client": kind})
+
+
+def kindofservice_edit(request, kind_id):
+    kind = get_object_or_404(KindOfService, id=kind_id)
+
+    if request.method == "POST":
+        form = KindOfServiceForm(request.POST, instance=kind)
+        if form.is_valid():
+            form.save()
+            return redirect("services:kindofservice_list")
+    else:
+        form = KindOfServiceForm(instance=kind)
+
+    return render(request, "services/kindofservice_edit.html", {"form": form, "kind": kind})

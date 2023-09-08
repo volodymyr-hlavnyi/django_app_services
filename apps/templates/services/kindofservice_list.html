@@ -1,13 +1,18 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-  <h1>Kind of services</h1>
-    <a href="{% url 'services:kindofservice_create' %}" class="btn btn-success mt-2">Add Kind of service</a>
+  <h1>Kind of Services</h1>
+  <a href="{% url 'services:kindofservice_create' %}" class="btn btn-success mt-2">Add Kind of Service</a>
 
   <ul class="list-group">
     {% for kind in kindofservice_list %}
-      <li class="list-group-item">{{ kind.name }}</li>
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ kind.name }}
+        <div>
+          <a href="{% url 'services:kindofservice_edit' kind.id %}" class="btn btn-primary btn-sm">Edit</a>
+          <a href="{% url 'services:kindofservice_delete' kind.id %}" class="btn btn-danger btn-sm">Delete</a>
+        </div>
+      </li>
     {% endfor %}
   </ul>
-
 {% endblock %}
