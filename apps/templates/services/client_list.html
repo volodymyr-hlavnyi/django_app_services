@@ -3,6 +3,7 @@
 {% block content %}
   <h1>Clients</h1>
     <a href="{% url 'services:create_client' %}" class="btn btn-success mt-2">Add Client</a>
+
   <ul class="list-group">
     {% for client in client_list %}
       <li class="list-group-item">{{ client.name }}</li>
