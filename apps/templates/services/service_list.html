@@ -1,0 +1,30 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+  <h1>List of Services</h1>
+    <a href="{% url 'services:service_create' %}" class="btn btn-success mt-2">Add Service</a>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col"></th>
+        <th>name</th>
+        <th>date of birth</th>
+        <th>created at</th>
+        <th>modified at</th>
+        <th>Extra info</th>
+    </tr>
+    </thead>
+    {% for service in service_list %}
+      <tr>
+            <th scope="row"></th>
+            <td>{{ service.date }}</td>
+            <td>{{ service.client }}</td>
+            <td>{{ service.kind_of_service }}</td>
+            <td>{{ service.time_hours }}</td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+{% endblock %}

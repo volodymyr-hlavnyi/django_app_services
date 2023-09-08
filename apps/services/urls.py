@@ -19,6 +19,6 @@ urlpatterns = [
     # #
     # path("createdetails/<int:pk>/", views.ContactDetailCreateView.as_view(), name="contacts_details_create"),
     # # path("createdetails/<int:pk>/", views.contact_info_detail_view, name="contacts_details_create"),
-    # #
-    # path("detail/<int:pk>/", views.ContactDetailView.as_view(), name="contacts_detail"),
+    path("list_service/", views.ServiceListView.as_view(), name="service_list"),
+    path("create_service/", views.ServiceCreateView.as_view(), name="service_create"),
 ]

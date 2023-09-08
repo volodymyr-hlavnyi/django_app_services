@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
-from apps.services.models import Client, KindOfService
+from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm
 
 
@@ -55,3 +55,14 @@ class KindOfServiceCreateView(CreateView):
     model = KindOfService
     fields = ("name",)
     success_url = reverse_lazy("services:kindofservice_list")
+
+
+class ServiceListView(ListView):
+    model = Service
+    context_object_name = "service_list"
+
+
+class ServiceCreateView(CreateView):
+    model = Service
+    fields = ("date", "client", "kind_of_service", "time_hours")
+    success_url = reverse_lazy("services:service_list")
