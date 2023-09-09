@@ -5,12 +5,36 @@ from django.views.generic import CreateView, ListView
 from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm, KindOfServiceForm
 
+import requests
+from bs4 import BeautifulSoup
+from .models import CurrencyRate
 
 def home(request):
     return render(request, "services/home.html")
 
 
 # Create your views here.
+def currency_view(request):
+    url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        exchange_rates = response.json()
+
+        usd_rate = None
+        eur_rate = None
+        for currency in exchange_rates:
+            if currency["cc"] == "USD":
+                usd_rate = currency["rate"]
+            elif currency["cc"] == "EUR":
+                eur_rate = currency["rate"]
+
+        if usd_rate and eur_rate:
+            return render(request, 'services/currency_template.html', {'usd_rate': usd_rate, 'eur_rate': eur_rate})
+        else:
+            return render(request, 'services/currency_template.html', {'usd_rate': 'N/A', 'eur_rate': 'N/A'})
+    else:
+        return render(request, 'services/currency_template.html', {'usd_rate': 'N/A', 'eur_rate': 'N/A'})
 def client_edit(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
@@ -88,3 +112,5 @@ def kindofservice_edit(request, kind_id):
         form = KindOfServiceForm(instance=kind)
 
     return render(request, "services/kindofservice_edit.html", {"form": form, "kind": kind})
+
+
