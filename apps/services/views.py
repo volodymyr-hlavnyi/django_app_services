@@ -6,14 +6,9 @@ from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm, KindOfServiceForm
 
 import requests
-from bs4 import BeautifulSoup
-from .models import CurrencyRate
-
 def home(request):
     return render(request, "services/home.html")
 
-
-# Create your views here.
 def currency_view(request):
     url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
     response = requests.get(url)
@@ -21,20 +16,35 @@ def currency_view(request):
     if response.status_code == 200:
         exchange_rates = response.json()
 
-        usd_rate = None
-        eur_rate = None
-        for currency in exchange_rates:
-            if currency["cc"] == "USD":
-                usd_rate = currency["rate"]
-            elif currency["cc"] == "EUR":
-                eur_rate = currency["rate"]
+        # Получите список всех доступных валют
+        available_currencies = [currency["cc"] for currency in exchange_rates]
 
-        if usd_rate and eur_rate:
-            return render(request, 'services/currency_template.html', {'usd_rate': usd_rate, 'eur_rate': eur_rate})
+        selected_currency = request.GET.get("currency", "USD")  # По умолчанию USD
+
+        # Проверьте, выбрана ли валюта из списка доступных
+        if selected_currency not in available_currencies:
+            return render(request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"})
+
+        currency_rate = None
+
+        for currency in exchange_rates:
+            if currency["cc"] == selected_currency:
+                currency_rate = currency["rate"]
+                break
+
+        if currency_rate is not None:
+            context = {
+                "available_currencies": available_currencies,
+                "selected_currency": selected_currency,
+                "currency_rate": currency_rate,
+            }
+            return render(request, "services/currency_template.html", context)
         else:
-            return render(request, 'services/currency_template.html', {'usd_rate': 'N/A', 'eur_rate': 'N/A'})
+            return render(request, "services/currency_template.html", {"error_message": "Курс валюты не найден"})
     else:
-        return render(request, 'services/currency_template.html', {'usd_rate': 'N/A', 'eur_rate': 'N/A'})
+        return render(request, "services/currency_template.html", {"error_message": "Не удалось получить доступ к API"})
+
+
 def client_edit(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
 
