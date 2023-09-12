@@ -1,7 +1,7 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-    <h1> Add Client </h1>
+    <h1> Add Service </h1>
 
     <form method="POST">
         {% csrf_token %}
@@ -11,7 +11,7 @@
 
             <button class="btn btn-outline-danger" type="submit">Save</button>
 
-            <a href="{% url 'services:client_list' %}">
+            <a href="{% url 'services:service_list' %}">
                 <button class="btn btn-outline-primary" type="button">
                     Cancel
                 </button>

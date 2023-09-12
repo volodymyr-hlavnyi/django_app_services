@@ -1,0 +1,26 @@
+{% extends "base_services/base.html" %}
+
+{% block title %}Курсы валют{% endblock %}
+
+{% block content %}
+    <h1>Курс выбранной валюты:</h1>
+
+    <form method="GET">
+        <label for="currency">Выберите валюту:</label>
+        <select name="currency" id="currency">
+            {% for currency in available_currencies %}
+                <option value="{{ currency }}" {% if selected_currency == currency %}selected{% endif %}>
+                    {{ currency }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="Показать курс">
+    </form>
+
+    {% if error_message %}
+        <p>{{ error_message }}</p>
+    {% else %}
+        <p>Выбранная валюта: {{ selected_currency }}</p>
+        <p>Курс: {{ currency_rate }}</p>
+    {% endif %}
+{% endblock %}
