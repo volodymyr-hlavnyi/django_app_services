@@ -6,8 +6,11 @@ from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm, KindOfServiceForm
 
 import requests
+
+
 def home(request):
     return render(request, "services/home.html")
+
 
 def currency_view(request):
     url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
@@ -23,7 +26,9 @@ def currency_view(request):
 
         # Проверьте, выбрана ли валюта из списка доступных
         if selected_currency not in available_currencies:
-            return render(request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"})
+            return render(
+                request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"}
+            )
 
         currency_rate = None
 
@@ -122,5 +127,3 @@ def kindofservice_edit(request, kind_id):
         form = KindOfServiceForm(instance=kind)
 
     return render(request, "services/kindofservice_edit.html", {"form": form, "kind": kind})
-
-
