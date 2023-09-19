@@ -1,8 +1,15 @@
 # Core for web.
-django==4.2.4
+django==4.2.5
 
 # css bootstrap
 django-bootstrap-v5==1.0.11
 
 # environment variables
 django-environ==0.11.2
+
+# for NBU API
+requests~=2.31.0
+beautifulsoup4~=4.12.2
+
+# connector to PostgreSQL
+psycopg==3.1.10
