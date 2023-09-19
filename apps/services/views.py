@@ -85,7 +85,6 @@ def client_edit(request, client_id):
     if request.method == "POST":
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
-            form.user = request.user
             form.save()
             return redirect("services:client_list")
     else:
@@ -255,14 +254,12 @@ def kindofservice_delete(request, kind_id):
     return render(request, "services/kindofservice_delete.html", {"client": kind})
 
 
-@login_required
 def kindofservice_edit(request, kind_id):
     kind = get_object_or_404(KindOfService, id=kind_id)
 
     if request.method == "POST":
         form = KindOfServiceForm(request.POST, instance=kind)
         if form.is_valid():
-            form.user = request.user
             form.save()
             return redirect("services:kindofservice_list")
     else:
