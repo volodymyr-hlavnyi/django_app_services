@@ -30,9 +30,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data:rw
     profiles:
-      - full_dev
-      - local_dev
-      - pgadmin
+        - full_dev
+        - local_dev
+        - pgadmin
 
   pgadmin:
     image: dpage/pgadmin4:7.6
