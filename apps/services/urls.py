@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import signup_view, login_view
 
 app_name = "services"
 
@@ -16,4 +17,6 @@ urlpatterns = [
     path("delete_kind/<int:kind_id>/", views.kindofservice_delete, name="kindofservice_delete"),
     path("list_service/", views.ServiceListView.as_view(), name="service_list"),
     path("create_service/", views.ServiceCreateView.as_view(), name="service_create"),
+    path("signup/", signup_view, name="signup"),
+    path("login/", login_view, name="login"),
 ]
