@@ -1,0 +1,31 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+<main class="form-signin">
+  <form method="post">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Create an account</h1>
+
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.name.label_tag }}
+      {{ form.name }}
+    </div>
+    <div>
+      {{ form.email.label_tag }}
+      {{ form.email }}
+    </div>
+    <div>
+      {{ form.password1.label_tag }}
+      {{ form.password1 }}
+    </div>
+    <div>
+      {{ form.password2.label_tag }}
+      {{ form.password2 }}
+    </div>
+
+    <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+  </form>
+</main>
+{% endblock %}
