@@ -10,7 +10,10 @@ from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
-import logging
+
+# import logging
+
+# from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -133,6 +136,11 @@ class ServiceCreateView(CreateView):
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
 
+    # def __init__(self, *args, **kwargs):
+    #     super(ServiceCreateView, self).__init__(*args, **kwargs)
+    #     self.fields['client'].queryset = Client.objects.filter(user=self.request.user_id)
+    #     self.fields['kind_of_service'].queryset = KindOfService.objects.filter(user=self.request.user_id)
+
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.user = self.request.user
@@ -192,13 +200,13 @@ def client_info(request, client_id):
     services_for_client = Service.objects.filter(client=client)
     service_kinds = [item.kind_of_service for item in services_for_client]
 
-    logger = logging.getLogger("django")
-    logger.info(f"services_for_client list is {service_kinds} for name {client.name} with {client.id}")
+    # logger = logging.getLogger("django")
+    # logger.info(f"services_for_client list is {service_kinds} for name {client.name} with {client.id}")
 
-    if request.method == "GET":
-        pass
-        # client.delete()
-        # return redirect("services:client_list")
+    # if request.method == "GET":
+    #    pass
+    #       client.delete()
+    #       return redirect("services:client_list")
 
     return render(
         request=request,
