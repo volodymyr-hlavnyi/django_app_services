@@ -1,14 +1,14 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-    <h3>Edit Service</h3>
+    <h1>Edit Service</h1>
 
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
 
-        <button type="submit" class="btn btn-outline-primary">Save</button>
-        <a href="{% url 'services:service_delete' service.id %}" class="btn btn-outline-danger">Delete</a>
-        <a href="{% url 'services:service_list' %}" class="btn btn-outline-secondary">Back to Service</a>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'services:service_delete' service.id %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'services:service_list' %}" class="btn btn-secondary">Back to Service</a>
     </form>
 {% endblock %}
