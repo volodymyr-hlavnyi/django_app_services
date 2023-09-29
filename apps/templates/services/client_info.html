@@ -6,8 +6,8 @@
 </head>
 
 {% block content %}
-    <h3>Client info</h3>
-    <h4>Client: {{ client.name }}</h4>
+    <h1>Client info</h1>
+    <h3>Client: {{ client.name }}</h3>
     {% if service_kinds %}
         <ul class="list-group">
             {% for item in service_kinds %}
@@ -20,6 +20,6 @@
         No data found for {{ client }}
     {% endif %}
     <br>
-    <a href="{% url 'services:client_list' %}" class="btn btn-outline-primary btn-sm">Back</a>
+    <a href="{% url 'services:client_list' %}" class="btn btn-primary btn-sm">Back</a>
 
 {% endblock %}

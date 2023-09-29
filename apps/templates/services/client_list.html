@@ -1,17 +1,17 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-    <h3>Clients</h3>
-    <a href="{% url 'services:create_client' %}" class="btn btn-outline-success mt-2">Add Client</a>
+    <h1>Clients</h1>
+    <a href="{% url 'services:create_client' %}" class="btn btn-success mt-2">Add Client</a>
 
     <ul class="list-group">
         {% for client in client_list %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ client.name }}
                 <div>
-                    <a href="{% url 'services:client_edit' client.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
-                    <a href="{% url 'services:client_delete' client.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
-                    <a href="{% url 'services:client_info' client.id %}" class="btn btn-outline-info btn-sm">Info</a>
+                    <a href="{% url 'services:client_edit' client.id %}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{% url 'services:client_delete' client.id %}" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="{% url 'services:client_info' client.id %}" class="btn btn-info btn-sm">Info</a>
                 </div>
             </li>
         {% endfor %}
