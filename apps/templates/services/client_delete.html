@@ -7,7 +7,7 @@
 
   <form method="post">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">Yes, delete</button>
-    <a href="{% url 'services:client_edit' client.id %}" class="btn btn-secondary">Cancel</a>
+    <button type="submit" class="btn btn-outline-danger">Yes, delete</button>
+    <a href="{% url 'services:client_edit' client.id %}" class="btn btn-outline-secondary">Cancel</a>
   </form>
 {% endblock %}
