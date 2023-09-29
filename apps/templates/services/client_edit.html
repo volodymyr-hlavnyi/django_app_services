@@ -7,8 +7,8 @@
     {% csrf_token %}
     {{ form.as_p }}
 
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{% url 'services:client_delete' client.id %}" class="btn btn-danger">Delete</a>
-    <a href="{% url 'services:client_list' %}" class="btn btn-secondary">Back to Clients</a>
+    <button type="submit" class="btn btn-outline-primary">Save</button>
+    <a href="{% url 'services:client_delete' client.id %}" class="btn btn-outline-danger">Delete</a>
+    <a href="{% url 'services:client_list' %}" class="btn btn-outline-secondary">Back to Clients</a>
   </form>
 {% endblock %}

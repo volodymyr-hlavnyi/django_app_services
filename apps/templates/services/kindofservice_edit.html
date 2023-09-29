@@ -1,13 +1,12 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-  <h1>Edit Kind of Service</h1>
+    <h1>Edit Kind of Service</h1>
 
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
-  </form>
-
-  <a href="{% url 'services:kindofservice_list' %}" class="btn btn-secondary mt-2">Cancel</a>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-primary">Save</button>
+        <a href="{% url 'services:kindofservice_list' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
 {% endblock %}

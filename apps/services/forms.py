@@ -1,7 +1,5 @@
 from django import forms
 
-# from django.template.context_processors import request
-
 from .models import Client, KindOfService, Service
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from apps.users.models import User
@@ -23,7 +21,12 @@ class KindOfServiceForm(forms.ModelForm):
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ["client", "kind_of_service", "time_hours", "date"]
+        fields = ["date", "client", "kind_of_service", "time_hours"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["client"].queryset = Client.objects.filter(user=self.instance.user_id)
+        self.fields["kind_of_service"].queryset = KindOfService.objects.filter(user=self.instance.user_id)
 
 
 class SignupForm(UserCreationForm):
