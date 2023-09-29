@@ -53,6 +53,14 @@ d-run-i-pgadmin:
 		docker compose \
 			up --build
 
+.PHONY: d-run-i-pgadmin
+# Run pgadmin
+d-run-i-pgadmin:
+	@COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+		COMPOSE_PROFILES=pgadmin \
+		docker compose \
+			up --build
+
 .PHONY: d-stop
 # Stop services
 d-stop:
@@ -151,7 +159,3 @@ init-dev-i-delete-superuser:
 #init-first-start-db:
 #	@python manage.py init_first_start
 
-.PHONY: show-contacts-aggregation
-# Show Contacts Aggregation (for testing)
-show-contacts-aggregation:
-	@python manage.py show_aggregation_info
