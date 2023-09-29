@@ -43,15 +43,24 @@
                     <a class="dropdown-item" href="{% url 'services:currency_view' %}">Currency Rates</a>
                 </div>
             </li>
+            {% if user.is_authenticated %}
+                <p> {{ user.username }}</p>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'services:logout' %}">Logout <span class="sr-only"></span></a>
+                </li>
+            {% else %}
+                <li class="nav-item active">
+
+                    <a class="nav-link" href="{% url 'services:login' %}">Login <span class="sr-only"></span></a>
+                </li>
+                <li>
+
+                    <a class="nav-link" href="{% url 'services:signup' %}">Signup <span class="sr-only"></span></a>
+                </li>
+            {% endif %}
             <li class="nav-item active">
-
-                <a class="nav-link" href="{% url 'services:login' %}">Login <span class="sr-only"></span></a>
+                <a class="nav-link" href="{% url 'admin:index' %}">Admin <span class="sr-only"></span></a>
             </li>
-            <li>
-
-                <a class="nav-link" href="{% url 'services:signup' %}">Signup <span class="sr-only"></span></a>
-            </li>
-    </div>
         </ul>
     </div>
 </nav>

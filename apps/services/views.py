@@ -5,7 +5,7 @@ from django.views.generic import CreateView, ListView
 from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm, KindOfServiceForm
 
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
@@ -156,3 +156,8 @@ def login_view(request):
         form = LoginForm()
 
     return render(request, "services/sing_in_up/signin.html", {"form": form})
+
+
+def logout_view(request):
+    logout(request)
+    return redirect("home")

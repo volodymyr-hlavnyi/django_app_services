@@ -1,7 +1,7 @@
 version: '3.9'
 
 volumes:
-  postgres_data: {}
+  postgres_data: { }
 
 services:
   app:
@@ -25,5 +25,18 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data:rw
     profiles:
-        - full_dev
-        - local_dev
+      - full_dev
+      - local_dev
+      - pgadmin
+
+  pgadmin:
+    image: dpage/pgadmin4:7.6
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL:-admin@mail.com}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD:-admin123}
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - pgadmin

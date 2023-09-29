@@ -19,4 +19,5 @@ urlpatterns = [
     path("create_service/", views.ServiceCreateView.as_view(), name="service_create"),
     path("signup/", signup_view, name="signup"),
     path("login/", login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
 ]

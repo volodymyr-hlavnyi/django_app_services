@@ -38,6 +38,14 @@ d-run-i-local-dev:
 		docker compose \
 			up --build
 
+.PHONY: d-run-i-pgadmin
+# Run pgadmin
+d-run-i-pgadmin:
+	@COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+		COMPOSE_PROFILES=pgadmin \
+		docker compose \
+			up --build
+
 .PHONY: d-stop
 # Stop services
 d-stop:
@@ -48,6 +56,7 @@ d-stop:
 # Purge all data related with services
 d-purge:
 	@COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+	COMPOSE_PROFILES=pgadmin   \
 		docker compose down --volumes --remove-orphans --rmi local --timeout 0
 
 
@@ -120,17 +129,13 @@ init-dev-i-create-superuser:
 init-dev-i-delete-superuser:
 	@python manage.py delete_superuser
 
-.PHONY: init-dev-i-generate-contacts
-# init-dev-i-generate-contacts 20
-init-dev-i-generate-contacts:
-	@python manage.py generate_contacts --amount 20
+#.PHONY: init-dev-i-generate-contacts
+## init-dev-i-generate-contacts 20
+#init-dev-i-generate-contacts:
+#	@python manage.py generate_contacts --amount 20
 
-.PHONY: init-first-start-db
-# Filling database for first use
-init-first-start-db:
-	@python manage.py init_first_start
+#.PHONY: init-first-start-db
+## Filling database for first use
+#init-first-start-db:
+#	@python manage.py init_first_start
 
-.PHONY: show-contacts-aggregation
-# Show Contacts Aggregation (for testing)
-show-contacts-aggregation:
-	@python manage.py show_aggregation_info

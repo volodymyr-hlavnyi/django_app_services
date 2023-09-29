@@ -1,7 +1,10 @@
 from django import forms
+
+# from django.template.context_processors import request
+
 from .models import Client, KindOfService, Service
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from .models import User
+from apps.users.models import User
 
 
 class ClientForm(forms.ModelForm):
@@ -16,6 +19,7 @@ class KindOfServiceForm(forms.ModelForm):
         fields = ["name"]
 
 
+# @login_required
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
@@ -23,11 +27,9 @@ class ServiceForm(forms.ModelForm):
 
 
 class SignupForm(UserCreationForm):
-    name = forms.CharField(max_length=100, required=True, help_text="Required. Enter your full name.")
-
     class Meta:
         model = User
-        fields = ("name", "username", "email", "password1", "password2")
+        fields = ("username", "email", "password1", "password2")
 
 
 class LoginForm(AuthenticationForm):
