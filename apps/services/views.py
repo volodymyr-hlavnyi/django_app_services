@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
@@ -59,6 +60,7 @@ def client_edit(request, client_id):
     if request.method == "POST":
         form = ClientForm(request.POST, instance=client)
         if form.is_valid():
+            form.user = request.user
             form.save()
             return redirect("services:client_list")
     else:
@@ -82,15 +84,27 @@ class ClientsCreateView(CreateView):
     fields = ("name",)
     success_url = reverse_lazy("services:client_list")
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class ClientListView(ListView):
     model = Client
     context_object_name = "client_list"
 
+    def get_queryset(self):
+        return Client.objects.filter(user=self.request.user)
+
 
 class KindOfServiceListView(ListView):
     model = KindOfService
     context_object_name = "kindofservice_list"
+
+    def get_queryset(self):
+        return KindOfService.objects.filter(user=self.request.user)
 
 
 class KindOfServiceCreateView(CreateView):
@@ -98,16 +112,31 @@ class KindOfServiceCreateView(CreateView):
     fields = ("name",)
     success_url = reverse_lazy("services:kindofservice_list")
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
 
 class ServiceListView(ListView):
     model = Service
     context_object_name = "service_list"
+
+    def get_queryset(self):
+        return Service.objects.filter(user=self.request.user)
 
 
 class ServiceCreateView(CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
 
 
 def kindofservice_delete(request, kind_id):
@@ -124,6 +153,7 @@ def kindofservice_edit(request, kind_id):
     if request.method == "POST":
         form = KindOfServiceForm(request.POST, instance=kind)
         if form.is_valid():
+            form.user = request.user
             form.save()
             return redirect("services:kindofservice_list")
     else:
