@@ -1,8 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import User
+
+# from apps.users.models import User
 
 
 class Client(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=100)
 
     created_at = models.DateTimeField(
@@ -25,6 +28,8 @@ class Client(models.Model):
 
 
 class KindOfService(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     name = models.CharField(max_length=100)
 
     created_at = models.DateTimeField(
@@ -47,6 +52,7 @@ class KindOfService(models.Model):
 
 
 class Service(models.Model):
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(blank=False, null=True)
     client = models.ForeignKey("Client", on_delete=models.CASCADE)
     kind_of_service = models.ForeignKey("KindOfService", on_delete=models.CASCADE)
@@ -80,9 +86,9 @@ class CurrencyRate(models.Model):
         return self.name
 
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.name
+# class UserProfile(models.Model):
+#     #user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=100)
+#
+#     def __str__(self):
+#         return self.name
