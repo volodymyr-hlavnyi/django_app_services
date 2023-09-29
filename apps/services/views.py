@@ -4,7 +4,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
 from apps.services.models import Client, KindOfService, Service
-from apps.services.forms import ClientForm, KindOfServiceForm
+from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
 
 from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
@@ -138,6 +138,29 @@ class ServiceCreateView(CreateView):
         self.object.user = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+def service_edit(request, service_id):
+    service = get_object_or_404(Service, pk=service_id)
+
+    if request.method == "POST":
+        form = ServiceForm(request.POST, instance=service)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
+            return redirect("services:service_list")
+    else:
+        form = ServiceForm(instance=service)
+
+    return render(request, "services/service_edit.html", {"form": form, "service": service})
+
+
+def service_delete(request, service_id):
+    service = get_object_or_404(KindOfService, id=service_id)
+    if request.method == "POST":
+        service.delete()
+        return redirect("services:service_list")
+    return render(request, "services/service_delete.html", {"service": service})
 
 
 def kindofservice_delete(request, kind_id):

@@ -1,30 +1,38 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-  <h1>List of Services</h1>
+    <h1>List of Services</h1>
     <a href="{% url 'services:service_create' %}" class="btn btn-success mt-2">Add Service</a>
 
-  <table class="table table-striped">
-    <thead>
-    <tr>
-        <th scope="col"></th>
-        <th>date</th>
-        <th>client</th>
-        <th>kind of service</th>
-        <th>time_hours</th>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th>date</th>
+            <th>client</th>
+            <th>kind of service</th>
+            <th>time_hours</th>
+            <th>actions</th>
 
-    </tr>
-    </thead>
-    {% for service in service_list %}
-      <tr>
-            <th scope="row"></th>
-            <td>{{ service.date }}</td>
-            <td>{{ service.client }}</td>
-            <td>{{ service.kind_of_service }}</td>
-            <td>{{ service.time_hours }}</td>
-      </tr>
-    {% endfor %}
+        </tr>
+        </thead>
+        {% for service in service_list %}
+            <tr>
+                <th scope="row"></th>
+                <td>{{ service.date }}</td>
+                <td>{{ service.client }}</td>
+                <td>{{ service.kind_of_service }}</td>
+                <td>{{ service.time_hours }}</td>
+                <td>
+                    <div>
+                        <a href="{% url 'services:service_edit' service.id %}" class="btn btn-primary btn-sm">Edit</a>
+                        <a href="{% url 'services:service_delete' service.id %}"
+                           class="btn btn-danger btn-sm">Delete</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
 
-  </table>
+    </table>
 
 {% endblock %}
