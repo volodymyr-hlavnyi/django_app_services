@@ -6,6 +6,7 @@ from apps.services import models
 @admin.register(models.Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = (
+        "user",  # "user",
         "name",
         "created_at",
         "modified_at",
@@ -15,6 +16,7 @@ class ClientAdmin(admin.ModelAdmin):
 @admin.register(models.KindOfService)
 class KindOfServiceAdmin(admin.ModelAdmin):
     list_display = (
+        "user",  # "user",
         "name",
         "created_at",
         "modified_at",
@@ -32,6 +34,7 @@ class KindOfServiceAdmin(admin.ModelAdmin):
 @admin.register(models.Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = (
+        "user",  # "user",
         "date",
         "client",
         "kind_of_service",
@@ -41,6 +44,7 @@ class ServiceAdmin(admin.ModelAdmin):
     )
 
     list_filter = (
+        "user",  # "user",
         "date",
         "client",
         "kind_of_service",

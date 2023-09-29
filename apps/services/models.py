@@ -1,11 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 
-# from apps.users.models import User
+User = get_user_model()
 
 
 class Client(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
 
     created_at = models.DateTimeField(
@@ -28,7 +28,7 @@ class Client(models.Model):
 
 
 class KindOfService(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     name = models.CharField(max_length=100)
 
@@ -52,7 +52,8 @@ class KindOfService(models.Model):
 
 
 class Service(models.Model):
-    # user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
     date = models.DateField(blank=False, null=True)
     client = models.ForeignKey("Client", on_delete=models.CASCADE)
     kind_of_service = models.ForeignKey("KindOfService", on_delete=models.CASCADE)
