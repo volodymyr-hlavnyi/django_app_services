@@ -1,64 +1,24 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-    <main class="form-signin">
-        <form method="post">
-            {% csrf_token %}
-            <h1 class="h3 mb-3 fw-normal">Login</h1>
+<main class="form-signin">
+  <form method="post">
+    {% csrf_token %}
+    <h1 class="h3 mb-3 fw-normal">Login</h1>
 
-            {{ form.non_field_errors }}
-            <div>
-                {{ form.username.label_tag }}
-                {{ form.username }}
-            </div>
-            <div>
-                {{ form.password.label_tag }}
-                {{ form.password }}
-            </div>
-{#            <div class="flex-container">#}
-{#                <form class="px-4 py-3">#}
-{#                    <div class="form-group">#}
-{#                        <label for="username">User name</label>#}
-{#                        <input type="username" class="form-control" id="{{ form.username }}"#}
-{#                               placeholder="Your name here">#}
-{#                    </div>#}
-{#                </form>#}
-{#            </div>#}
+    {{ form.non_field_errors }}
+    <div>
+      {{ form.username.label_tag }}
+      {{ form.username }}
+    </div>
+    <div>
+      {{ form.password.label_tag }}
+      {{ form.password }}
+    </div>
 
-            {#    <button class="btn btn-primary w-100 py-2" type="submit">Log in</button>#}
-            {#            <button class="btn btn-outline-primary" type="submit">Log in</button>#}
-
-            {#            <div class="flex-container">#}
-            {#                <form class="px-4 py-3">#}
-            {#                    <div class="form-group">#}
-            {#                        <label for="email">Email address</label>#}
-            {#                        <input type="email" class="form-control" id="email"#}
-            {#                               placeholder="email@example.com">#}
-            {#                    </div>#}
-            {#                    <div class="form-group">#}
-            {#                        <label for="password1">Password</label>#}
-            {#                        <input type="password" class="form-control" id="password1"#}
-            {#                               placeholder="Password">#}
-            {#                    </div>#}
-            {#                    <div class="form-check">#}
-            {#                        <input type="checkbox" class="form-check-input" id="dropdownCheck">#}
-            {#                        <label class="form-check-label" for="dropdownCheck">#}
-            {#                            Remember me#}
-            {#                        </label>#}
-            {#                    </div>#}
-            {#                    <button type="submit" class="btn btn-primary">Sign in</button>#}
-                                <button class="btn btn-outline-primary" type="submit">Sign in</button>
-            {#                </form>#}
-            {#                <div class="dropdown-divider"></div>#}
-            {#                <a class="dropdown-item" href="#">New around here? Sign up</a>#}
-            {#                <a>#}
-            {#                 <button class="btn btn-outline-danger" href="{% url 'services:signup' %}">New around here? Sign up</button>#}
-            {#                </a>#}
-
-            {#                <a class="dropdown-item" href="#">Forgot password?</a>#}
-            {#            </div>#}
-
-            {#    <p class="mt-5 mb-3 text-muted">&copy; 2023</p>#}
-        </form>
-    </main>
+{#    <button class="btn btn-primary w-100 py-2" type="submit">Log in</button>#}
+      <button class="btn btn-outline-primary" type="submit">Log in</button>
+    <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
+  </form>
+</main>
 {% endblock %}
