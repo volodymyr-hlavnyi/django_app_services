@@ -1,7 +1,7 @@
-# Django application
+# Django application for control Services
 
 ---
-![Main workflow](https://github.com/hillel-i-python-pro-i-2023-06-23/django_base__hlavnyi_volodymyr/actions/workflows/main-workflow.yml/badge.svg)
+![Main workflow](https://github.com/volodymyr-hlavnyi/django_app_services/actions/workflows/main-workflow.yml/badge.svg)
 
 ## 🏠 Homework 
 
