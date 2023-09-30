@@ -61,33 +61,35 @@
                 </div>
             </li>
 
-            <span class="navbar-text">
+            {% if user.is_authenticated %}
 
-                {% if user.is_authenticated %}
-                    <p> {{ user.username }}</p>
-                    <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'services:logout' %}">
-                        Logout <span class="sr-only"></span>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkLogin" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        {{ user.username }}
                     </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkLogin">
+                        <a class="dropdown-item" href="{% url 'services:logout' %}">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">Admin (django)</a>
+                    </div>
                 </li>
-                    <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'admin:index' %}">
-                        Admin <span class="sr-only"></span>
-                    </a>
-                </li>
-                {% else %}
-                    <li class="nav-item active">
+
+            {% else %}
+
+                <li class="nav-item active">
                     <a class="nav-link" href="{% url 'services:login' %}">
                         Login <span class="sr-only"></span>
                     </a>
                 </li>
-                    <li>
+
+                <li class="nav-item active">
                     <a class="nav-link" href="{% url 'services:signup' %}">
-                        Signup <span class="sr-only"></span>
+                        Register <span class="sr-only"></span>
                     </a>
                 </li>
-                {% endif %}
-            </span>
+            {% endif %}
+
         </ul>
     </div>
 </nav>
