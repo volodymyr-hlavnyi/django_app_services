@@ -29,4 +29,6 @@ urlpatterns = [
     path("signup/", signup_view, name="signup"),
     path("login/", login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
+    # Actions
+    path("actions/", views.ActionListView.as_view(), name="action_list")
 ]

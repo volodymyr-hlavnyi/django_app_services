@@ -1,0 +1,23 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+    <h1>Action Tracker</h1>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col"></th>
+                    <th>date</th>
+                    <th>client</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            {% for action in action_list %}
+                <tr>
+                    <th scope="row"></th>
+                    <td>{{ action.service.date }}</td>
+                    <td>{{ action.client }}</td>
+                    <td>{{ action.status }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+{% endblock %}

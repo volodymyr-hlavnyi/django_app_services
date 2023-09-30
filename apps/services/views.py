@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
-from apps.services.models import Client, KindOfService, Service, User
+from apps.services.models import Client, KindOfService, Service, User, Action
 from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
 
 from django.contrib.auth import login, logout
@@ -137,6 +137,14 @@ class ServiceListView(ListView):
 
     def get_queryset(self):
         return Service.objects.filter(user=self.request.user.id)
+
+
+class ActionListView(ListView):
+    model = Action
+    context_object_name = "action_list"
+
+    def get_queryset(self):
+        return Action.objects.filter(user=self.request.user.id)
 
 
 class ServiceCreateView(CreateView):
