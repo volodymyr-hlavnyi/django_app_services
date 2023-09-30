@@ -102,13 +102,13 @@ class ClientListView(ListView):
     context_object_name = "client_list"
 
     def get_queryset(self):
-        # logger = logging.getLogger("django")
+        logger = logging.getLogger("django")
 
-        client = Client.objects.filter(user=self.request.user.id)
+        queryset = Client.objects.filter(user=self.request.user.id)
 
-        # logger.info(f"----- Client ID is {}.")
+        logger.info(f"----- queryset is {queryset}.")
 
-        return client
+        return queryset
 
 
 class KindOfServiceListView(ListView):
