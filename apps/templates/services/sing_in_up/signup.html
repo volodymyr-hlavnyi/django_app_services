@@ -1,16 +1,17 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-<main class="form-signin">
-  <form method="post">
-    {% csrf_token %}
-    <h1 class="h3 mb-3 fw-normal">Create an account</h1>
+    <main class="form-signin">
+        <form method="post">
+            {% csrf_token %}
+            <h1 class="h3 mb-3 fw-normal">Create an account</h1>
 
-      {{ form.as_p }}
+            {{ form.as_p }}
 
-{#    <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>#}
-    <button class="btn btn-outline-danger" type="submit">Register</button>
-      <p class="mt-5 mb-3 text-muted">&copy; 2023</p>
-  </form>
-</main>
+
+            {#    <button class="btn btn-primary w-100 py-2" type="submit">Sign up</button>#}
+            <button class="btn btn-outline-danger" type="submit">Register</button>
+{#            <p class="mt-5 mb-3 text-muted">&copy; 2023</p>#}
+        </form>
+    </main>
 {% endblock %}
