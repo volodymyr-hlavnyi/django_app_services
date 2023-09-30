@@ -18,6 +18,10 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<div>
+    {% load static %}
+    <img src="{% static "logo/timetracker.png" %}" width="700" height="45" alt="Time Tracker 4 ALL">
+</div>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <a class="navbar-brand" href="{% url 'services:home' %}">Time Tracker</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
