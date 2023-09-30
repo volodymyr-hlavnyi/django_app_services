@@ -3,15 +3,13 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
-from apps.services.models import Client, KindOfService, Service, User
+from apps.services.models import Client, KindOfService, Service
 from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
 
 from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
-import logging
-
 
 # import logging
 
@@ -102,13 +100,7 @@ class ClientListView(ListView):
     context_object_name = "client_list"
 
     def get_queryset(self):
-        logger = logging.getLogger("django")
-
-        queryset = Client.objects.filter(user=self.request.user.id)
-
-        logger.info(f"----- queryset is {queryset}.")
-
-        return queryset
+        return Client.objects.filter(user=self.request.user.id)
 
 
 class KindOfServiceListView(ListView):
