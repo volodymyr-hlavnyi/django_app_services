@@ -180,7 +180,7 @@ def service_edit(request, service_id):
 
 
 def service_delete(request, service_id):
-    service = get_object_or_404(KindOfService, id=service_id)
+    service = get_object_or_404(Service, id=service_id)
     if request.method == "POST":
         service.delete()
         return redirect("services:service_list")

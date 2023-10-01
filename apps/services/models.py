@@ -114,13 +114,4 @@ class Action(models.Model):
     manually_closed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
-        current_date = datetime.now()
-
-        if not self.manually_closed:
-            # if current_date >= self.service.date + self.service.time_hours:
-            if current_date: # >= self.service.date + timedelta(days=1):
-                self.status = 'Expired'
-        else:
-            self.status = 'Closed'
-
         super().save()
