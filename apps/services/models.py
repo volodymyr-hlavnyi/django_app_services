@@ -113,5 +113,10 @@ class Action(models.Model):
     status = models.CharField(max_length=10, default='Started')
     manually_closed = models.BooleanField(default=False)
 
+    def close(self):
+        self.status = 'Closed'
+        self.manually_closed = True
+        super().save()
+
     def save(self, *args, **kwargs):
         super().save()

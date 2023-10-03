@@ -17,6 +17,16 @@
                     <td>{{ action.service.date }}</td>
                     <td>{{ action.client }}</td>
                     <td>{{ action.status }}</td>
+                    <td>{{ action.service.time_hours }}</td>
+                    <td>
+                        <div>
+                            {% if action.status == 'Started' %}
+                                <a href="{% url 'services:action_close' action.id %}" class="btn btn-outline-primary btn-sm">Close</a>
+                            {% else %}
+                                <a href="{% url 'services:service_edit' action.service.id %}" class="btn btn-outline-primary btn-sm">Start</a>
+                            {% endif %}
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </table>

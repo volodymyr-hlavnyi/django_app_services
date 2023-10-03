@@ -216,19 +216,19 @@ def client_info(request, client_id):
     services_for_client = Service.objects.filter(client=client)
     service_kinds = [item.kind_of_service for item in services_for_client]
 
-    # logger = logging.getLogger("django")
-    # logger.info(f"services_for_client list is {service_kinds} for name {client.name} with {client.id}")
-
-    # if request.method == "GET":
-    #    pass
-    #       client.delete()
-    #       return redirect("services:client_list")
-
     return render(
         request=request,
         template_name="services/client_info.html",
         context={"client": client, "service_kinds": service_kinds},
     )
+
+
+def action_close(request, action_id):
+    action = Action.objects.filter(id=action_id)
+    if request.method == "POST":
+        action[0].close()
+        return redirect("services:action_list")
+    return render(request, "services/action_close.html", {"action": action})
 
 
 def signup_view(request):
