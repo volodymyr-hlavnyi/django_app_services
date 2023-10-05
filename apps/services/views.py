@@ -241,6 +241,7 @@ def kindofservice_delete(request, kind_id):
     return render(request, "services/kindofservice_delete.html", {"client": kind})
 
 
+@login_required
 def kindofservice_edit(request, kind_id):
     kind = get_object_or_404(KindOfService, id=kind_id)
 
