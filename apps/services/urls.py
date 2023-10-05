@@ -31,4 +31,6 @@ urlpatterns = [
     path("logout/", views.logout_view, name="logout"),
     # Actions
     path("actions/", views.ActionListView.as_view(), name="action_list"),
+    # User (settings)
+    path("edit_userprofile/<int:user_id>", views.userprofile_edit, name="userprofile_edit"),
 ]

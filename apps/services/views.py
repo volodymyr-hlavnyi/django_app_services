@@ -9,14 +9,19 @@ from django.views.generic import CreateView, ListView
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
 from apps.services.models.service import Service, Action
-from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
+from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm, UserProfileForm
 
 from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
 
+from .models.userprofile import UserProfile
 from .tasks import example_1
+
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 # import logging
@@ -189,6 +194,35 @@ def service_edit(request, service_id):
         form = ServiceForm(instance=service)
 
     return render(request, "services/service_edit.html", {"form": form, "service": service})
+
+
+@login_required
+def userprofile_edit(request, user_id):
+    if UserProfile.objects.filter(user_id=user_id).exists():
+        userprofile = UserProfile.objects.get(user_id=user_id)
+    else:
+        userprofile = UserProfile.objects.create(user_id=user_id)
+        userprofile.visual_theme = "light"
+        userprofile.save()
+
+    # userprofile = get_object_or_404(UserProfile, pk=user_id)
+
+    if request.method == "POST":
+        form = UserProfileForm(request.POST, instance=userprofile)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
+            return render(
+                request,
+                "services/user_profile/userprofile_edit.html",
+                {"form": form, "user": request.user, "is_saved": True},
+            )
+    else:
+        form = UserProfileForm(instance=userprofile)
+
+    return render(
+        request, "services/user_profile/userprofile_edit.html", {"form": form, "user": request.user, "is_saved": False}
+    )
 
 
 def service_delete(request, service_id):

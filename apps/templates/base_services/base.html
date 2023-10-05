@@ -69,11 +69,11 @@
                         {{ user.username }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkLogin">
+                        <a class="dropdown-item" href="{% url 'services:userprofile_edit' user.id %}">Edit settings</a>
+                        <a class="dropdown-item" href="{% url 'services:action_list' %}">Action Tracker</a>
                         <a class="dropdown-item" href="{% url 'services:logout' %}">Logout</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="{% url 'admin:index' %}">Admin (django)</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'services:action_list' %}">Action Tracker</a>
                     </div>
                 </li>
 

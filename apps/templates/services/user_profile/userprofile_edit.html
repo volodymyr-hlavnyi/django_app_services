@@ -1,23 +1,17 @@
 {% extends "base_services/base.html" %}
 
 {% block content %}
-    <h3>Edit User settings</h3>
-    <h4>{{ user }}</h4>
+    <h1>Edit User settings</h1>
+    <h3>{{ user }}</h3>
 
     <form method="post">
         {% csrf_token %}
-        {% if is_saved %}
-            <br>
-            <b>Visual theme:  {{ user.userprofile.visual_theme }}</b>
-            <br>
-        {% else %}
-            {{ form.as_p }}
-        {% endif %}
-
+        {{ form.as_p }}
         {% if is_saved %}
             <div class="alert alert-success" role="alert">
                 User settings saved!
             </div>
+            {#            <button type="submit" class="btn btn-outline-secondary">Return</button>#}
             <a href="{% url 'services:service_list' %}" class="btn btn-outline-secondary">Return</a>
         {% else %}
             <button type="submit" class="btn btn-outline-primary">Save</button>
