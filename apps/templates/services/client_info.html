@@ -6,8 +6,8 @@
 </head>
 
 {% block content %}
-    <h1>Client info</h1>
-    <h3>Client: {{ client.name }}</h3>
+    <h3>Client info</h3>
+    <h4>Client: {{ client.name }}</h4>
     {% if service_kinds %}
         <ul class="list-group">
             {% for item in service_kinds %}
