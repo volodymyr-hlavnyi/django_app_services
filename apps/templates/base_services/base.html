@@ -1,5 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+{#<html lang="en" data-bs-theme="dark">#}
+{% if user.is_authenticated %}
+    {% if user.userprofile.visual_theme == 'dark' %}
+        <html lang="en" data-bs-theme="dark">
+    {% else %}
+        <html lang="en" data-bs-theme="light">
+    {% endif %}
+{% else %}
+    <html lang="en" data-bs-theme="light">
+{% endif %}
+
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,6 +19,8 @@
     {% bootstrap_css %}
     {% bootstrap_javascript %}
     {% load static %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
             integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
             crossorigin="anonymous"></script>
@@ -21,79 +34,88 @@
 
 <body>
 
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
+{#<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" data-bs-theme="dark">#}
+{#<nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">#}
+{% if user.is_authenticated %}
+    {% if user.userprofile.visual_theme == 'dark' %}
+        <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="dark">
+    {% else %}
+        <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">
+    {% endif %}
+{% else %}
+    <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">
+{% endif %}
+<a class="navbar-brand" href="{% url 'services:home' %}">
+    <img src="{% static "logo/time_tracker_40.png" %}" class="img-fluid" alt="Time Tracker">
+</a>
 
-    <a class="navbar-brand" href="{% url 'services:home' %}">
-        <img src="{% static "logo/time_tracker_40.png" %}" class="img-fluid" alt="Time Tracker">
-    </a>
+<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-            aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<div class="collapse navbar-collapse" id="navbarNavDropdown">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            <a class="nav-link" href="{% url 'services:service_list' %}">
+                Services <span class="sr-only"></span>
+            </a>
+        </li>
 
-    <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'services:service_list' %}">
-                    Services <span class="sr-only"></span>
-                </a>
-            </li>
+        {#            <li class="nav-item">#}
+        {#                <a class="nav-link" href="#">Features</a>#}
+        {#            </li>#}
+        {##}
+        {#            <li class="nav-item">#}
+        {#                <a class="nav-link" href="#">Pricing</a>#}
+        {#            </li>#}
 
-            {#            <li class="nav-item">#}
-            {#                <a class="nav-link" href="#">Features</a>#}
-            {#            </li>#}
-            {##}
-            {#            <li class="nav-item">#}
-            {#                <a class="nav-link" href="#">Pricing</a>#}
-            {#            </li>#}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
+                Catalogs
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <a class="dropdown-item" href="{% url 'services:client_list' %}">Clients</a>
+                <a class="dropdown-item" href="{% url 'services:kindofservice_list' %}">Kind of Services</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'services:currency_view' %}">Currency Rates</a>
+            </div>
+        </li>
+
+        {% if user.is_authenticated %}
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkLogin" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
-                    Catalogs
+                    {{ user.username }}
                 </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{% url 'services:client_list' %}">Clients</a>
-                    <a class="dropdown-item" href="{% url 'services:kindofservice_list' %}">Kind of Services</a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkLogin">
+                    <a class="dropdown-item" href="{% url 'services:userprofile_edit' user.id %}">Edit settings</a>
+                    <a class="dropdown-item" href="{% url 'services:action_list' %}">Action Tracker</a>
+                    <a class="dropdown-item" href="{% url 'services:logout' %}">Logout</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'services:currency_view' %}">Currency Rates</a>
+                    <a class="dropdown-item" href="{% url 'admin:index' %}">Admin (django)</a>
                 </div>
             </li>
 
-            {% if user.is_authenticated %}
+        {% else %}
 
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLinkLogin" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        {{ user.username }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLinkLogin">
-                        <a class="dropdown-item" href="{% url 'services:userprofile_edit' user.id %}">Edit settings</a>
-                        <a class="dropdown-item" href="{% url 'services:action_list' %}">Action Tracker</a>
-                        <a class="dropdown-item" href="{% url 'services:logout' %}">Logout</a>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" href="{% url 'admin:index' %}">Admin (django)</a>
-                    </div>
-                </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'services:login' %}">
+                    Login <span class="sr-only"></span>
+                </a>
+            </li>
 
-            {% else %}
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'services:signup' %}">
+                    Register <span class="sr-only"></span>
+                </a>
+            </li>
+        {% endif %}
 
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'services:login' %}">
-                        Login <span class="sr-only"></span>
-                    </a>
-                </li>
-
-                <li class="nav-item active">
-                    <a class="nav-link" href="{% url 'services:signup' %}">
-                        Register <span class="sr-only"></span>
-                    </a>
-                </li>
-            {% endif %}
-
-        </ul>
-    </div>
+    </ul>
+</div>
 </nav>
 
 <div class="container mt-4">
@@ -102,28 +124,38 @@
 </div>
 
 {#Footer#}
-<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light">
-    <button class="navbar-toggler" type="button" data-toggle="collapse"
-            data-target="#navbarTogglerDemo01"
-            aria-controls="navbarTogglerDemo01"
-            aria-expanded="true"
-            aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
-        <a class="navbar-brand" href="{% url 'services:home' %}">&copy; 2023 Developers</a>
-        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/volodymyr-hlavnyi">Volodymyr Hlavnyi</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/da-fedin">Dmytro Fedin</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="https://github.com/nikita-voloshyn">Nikita Voloshyn</a>
-            </li>
-        </ul>
-    </div>
+{#<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light" data-bs-theme="dark">#}
+{#    <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">#}
+{% if user.is_authenticated %}
+    {% if user.userprofile.visual_theme == 'dark' %}
+        <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="dark">
+    {% else %}
+        <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">
+    {% endif %}
+{% else %}
+    <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">
+{% endif %}
+<button class="navbar-toggler" type="button" data-toggle="collapse"
+        data-target="#navbarTogglerDemo01"
+        aria-controls="navbarTogglerDemo01"
+        aria-expanded="true"
+        aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+</button>
+<div class="collapse navbar-collapse" id="navbarTogglerDemo01">
+    <a class="navbar-brand" href="{% url 'services:home' %}">&copy; 2023 Developers</a>
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+        <li class="nav-item">
+            <a class="nav-link" href="https://github.com/volodymyr-hlavnyi">Volodymyr Hlavnyi</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://github.com/da-fedin">Dmytro Fedin</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="https://github.com/nikita-voloshyn">Nikita Voloshyn</a>
+        </li>
+    </ul>
+</div>
 </nav>
 
 </body>
