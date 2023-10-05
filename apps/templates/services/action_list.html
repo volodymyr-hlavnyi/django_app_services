@@ -20,12 +20,16 @@
                     <td>{{ action.client }}</td>
                     <td>{{ action.status }}</td>
                     <td>{{ action.service.time_hours }}</td>
-                    {% if action.manually_closed %}
-                        <td>earning</td>
-                    {% else %}
-                        <td>Service not closed yet</td>
-                    {% endif %}
+                    <td>
+                        {% if action.manually_closed %}
+                            {{ action_data }}
+                        {% elif action.status == 'Closed' %}
+                            {{ action_data }}
+                        {% else %}
+                            Service not closed yet
+                        {% endif %}
                     </td>
+                    <td>
                         <div>
                             {% if action.status == 'Started' %}
                                 <a href="{% url 'services:action_close' action.id %}" class="btn btn-outline-primary btn-sm">Close</a>

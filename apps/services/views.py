@@ -1,3 +1,5 @@
+# from collections import namedtuple
+
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -16,6 +18,8 @@ import logging
 # import logging
 
 # from django.contrib.auth.decorators import login_required
+
+# DataTuple = namedtuple('DataTuple', ['action_fields', 'action_data'])
 
 
 def home(request):
@@ -139,25 +143,35 @@ class ServiceListView(ListView):
         return Service.objects.filter(user=self.request.user.id)
 
 
-class ActionListView(ListView):
-    model = Action
-    context_object_name = "action_list"
+# class ActionListView(ListView):
+#     model = Action
+#     context_object_name = "action_list"
+#
+#     def get_queryset(self):
+#         queryset = Action.objects.filter(user=self.request.user.id)
+#         fake_data = 'money'
+#
+#         # query_tuple = DataTuple(queryset, fake_data)
+#         query_list = [queryset, fake_data]
+#         return query_list
 
-    def get_queryset(self):
-        queryset = Action.objects.filter(user=self.request.user.id)
+def action_list(request):
+    request = request
+    action_list = Action.objects.filter(user=request.user.id)
+    fake_data = 'money'
 
-        return queryset
+    return render(request,
+                  "services/action_list.html",
+                  {"action_list": action_list,
+                   "action_data": fake_data,
+                   }
+    )
 
 
 class ServiceCreateView(CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
-
-    # def __init__(self, *args, **kwargs):
-    #     super(ServiceCreateView, self).__init__(*args, **kwargs)
-    #     self.fields['client'].queryset = Client.objects.filter(user=self.request.user_id)
-    #     self.fields['kind_of_service'].queryset = KindOfService.objects.filter(user=self.request.user_id)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
