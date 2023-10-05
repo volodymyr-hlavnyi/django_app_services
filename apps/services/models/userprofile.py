@@ -6,27 +6,15 @@ User = get_user_model()
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     visual_theme = models.CharField(
         max_length=20,
         choices=(
-            ("light", "Light mode"),
-            ("dark", "Dark mode"),
+            ("light", "light theme"),
+            ("dark", "Dark theme"),
         ),
         default="light",
     )
 
-    created_at = models.DateTimeField(
-        auto_now_add=True,
-        blank=False,
-        null=False,
-    )
-
-    modified_at = models.DateTimeField(
-        auto_now=True,
-        blank=False,
-        null=False,
-    )
-
-    # def __str__(self):
-    #     return self.user
+    def __str__(self):
+        return self.name
