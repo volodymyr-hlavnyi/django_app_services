@@ -21,8 +21,6 @@ from .tasks import example_1
 
 from django.contrib.auth import get_user_model
 
-from .userprofile import get_user_theme
-
 User = get_user_model()
 
 
@@ -32,8 +30,7 @@ User = get_user_model()
 
 
 def home(request):
-    thema = get_user_theme(request.user.id)
-    return render(request, "services/home.html", {"theme": thema})
+    return render(request, "services/home.html")
 
 
 def currency_view(request):
@@ -299,12 +296,11 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            theme = get_user_theme(user.id)
-            return redirect("home", theme=theme)
+            return redirect("home")
     else:
         form = LoginForm()
 
-    return render(request, "services/sing_in_up/signin.html", {"form": form, "theme": "light"})
+    return render(request, "services/sing_in_up/signin.html", {"form": form})
 
 
 def logout_view(request):
