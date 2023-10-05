@@ -17,6 +17,13 @@
         <input type="submit" value="Показать курс">
     </form>
 
+    {% block celery %}
+    <h1>Celery</h1>
+    <p>
+        {{ result_id }}
+    </p>
+    {% endblock %}
+
     {% if error_message %}
         <p>{{ error_message }}</p>
     {% else %}

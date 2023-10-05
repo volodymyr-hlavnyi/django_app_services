@@ -1,3 +1,6 @@
+from celery.result import AsyncResult
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -10,6 +13,8 @@ from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
+
+from .tasks import example_1
 
 
 # import logging
@@ -46,11 +51,14 @@ def currency_view(request):
                 currency_rate = currency["rate"]
                 break
 
+        result: AsyncResult = example_1.delay("Hello, world!")
+
         if currency_rate is not None:
             context = {
                 "available_currencies": available_currencies,
                 "selected_currency": selected_currency,
                 "currency_rate": currency_rate,
+                "result_id": result.id,
             }
             return render(request, "services/currency_template.html", context)
         else:
@@ -140,11 +148,19 @@ class ActionListView(ListView):
         return Action.objects.filter(user=self.request.user.id)
 
 
-class ServiceCreateView(CreateView):
+class ServiceCreateView(LoginRequiredMixin, CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
 
+    #   class Meta:
+    #        client = Client.objects.filter(user=self.request.user.id)
+    # def get_initial(self):
+    #     initial = super().get_initial()
+    #     initial["client"] = Client.objects.filter(user=self.request.user)
+    #     initial["kind_of_service"] = KindOfService.objects.filter(user=self.request.user)
+    #     return initial
+    # def init
     # def __init__(self, *args, **kwargs):
     #     super(ServiceCreateView, self).__init__(*args, **kwargs)
     #     self.fields['client'].queryset = Client.objects.filter(user=self.request.user_id)
@@ -157,6 +173,7 @@ class ServiceCreateView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
+@login_required
 def service_edit(request, service_id):
     service = get_object_or_404(Service, pk=service_id)
 
