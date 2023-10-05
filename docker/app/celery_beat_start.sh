@@ -12,14 +12,6 @@ set -o nounset
 set -o xtrace
 # [bash_init]-[END]
 
-# Apply database migrations.
-make migrate
 
-# Add create superuser.
-#make init-dev-i-create-superuser || echo "Superuser already exists."
-
-# First initialize the database.
-#make init-first-start-db
-
-# Run application.
-python manage.py runserver 0.0.0.0:8000
+# Run celery.
+celery --app core beat --loglevel INFO

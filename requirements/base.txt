@@ -12,4 +12,8 @@ requests~=2.31.0
 beautifulsoup4~=4.12.2
 
 # connector to PostgreSQL
-psycopg==3.1.12
+psycopg[binary,pool]==3.1.12
+
+# celery
+celery==5.3.4
+django-celery-beat==2.5.0
