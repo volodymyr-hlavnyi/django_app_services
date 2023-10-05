@@ -1,6 +1,8 @@
 from django import forms
 
-from .models import Client, KindOfService, Service
+from .models.client import Client
+from .models.kindofservice import KindOfService
+from .models.service import Service
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from apps.users.models import User
 

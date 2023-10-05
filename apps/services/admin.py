@@ -1,9 +1,11 @@
 from django.contrib import admin
 
-from apps.services import models
+from apps.services.models.client import Client
+from apps.services.models.kindofservice import KindOfService
+from apps.services.models.service import Service
 
 
-@admin.register(models.Client)
+@admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     list_display = (
         "user",  # "user",
@@ -13,7 +15,7 @@ class ClientAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(models.KindOfService)
+@admin.register(KindOfService)
 class KindOfServiceAdmin(admin.ModelAdmin):
     list_display = (
         "user",  # "user",
@@ -31,7 +33,7 @@ class KindOfServiceAdmin(admin.ModelAdmin):
 #    model = models.KindOfService
 
 
-@admin.register(models.Service)
+@admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
     list_display = (
         "user",  # "user",
