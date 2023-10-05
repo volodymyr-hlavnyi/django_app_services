@@ -56,6 +56,9 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{% url 'services:logout' %}">Logout <span class="sr-only"></span></a>
                 </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'services:action_list' %}">Action Tracker <span class="sr-only"></span></a>
+                </li>
             {% else %}
                 <li class="nav-item active">
 
@@ -68,9 +71,6 @@
             {% endif %}
             <li class="nav-item active">
                 <a class="nav-link" href="{% url 'admin:index' %}">Admin <span class="sr-only"></span></a>
-            </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="{% url 'services:action_list' %}">Action Tracker <span class="sr-only"></span></a>
             </li>
         </ul>
     </div>

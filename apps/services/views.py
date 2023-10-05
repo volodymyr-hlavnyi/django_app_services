@@ -144,7 +144,9 @@ class ActionListView(ListView):
     context_object_name = "action_list"
 
     def get_queryset(self):
-        return Action.objects.filter(user=self.request.user.id)
+        queryset = Action.objects.filter(user=self.request.user.id)
+
+        return queryset
 
 
 class ServiceCreateView(CreateView):

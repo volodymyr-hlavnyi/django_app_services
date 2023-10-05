@@ -9,6 +9,8 @@
                     <th>date</th>
                     <th>client</th>
                     <th>Status</th>
+                    <th>Hours</th>
+                    <th>Earning</th>
                 </tr>
             </thead>
             {% for action in action_list %}
@@ -18,7 +20,12 @@
                     <td>{{ action.client }}</td>
                     <td>{{ action.status }}</td>
                     <td>{{ action.service.time_hours }}</td>
-                    <td>
+                    {% if action.manually_closed %}
+                        <td>earning</td>
+                    {% else %}
+                        <td>Service not closed yet</td>
+                    {% endif %}
+                    </td>
                         <div>
                             {% if action.status == 'Started' %}
                                 <a href="{% url 'services:action_close' action.id %}" class="btn btn-outline-primary btn-sm">Close</a>
