@@ -57,8 +57,14 @@ def currency_view(request):
             if currency["cc"] == selected_currency:
                 currency_rate = currency["rate"]
                 break
-
-        result: AsyncResult = example_1.delay("Hello, world!")
+        try:
+            result: AsyncResult = example_1.delay("Hello, world!")
+        except Exception:
+            return render(
+                request,
+                "services/currency_template.html",
+                {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
+            )
 
         if currency_rate is not None:
             context = {
