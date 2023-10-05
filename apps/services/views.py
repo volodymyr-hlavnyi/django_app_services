@@ -6,7 +6,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
-from apps.services.models import Client, KindOfService, Service, Action
+from apps.services.models.client import Client
+from apps.services.models.kindofservice import KindOfService
+from apps.services.models.service import Service, Action
 from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
 
 from django.contrib.auth import login, logout
