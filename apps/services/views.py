@@ -1,4 +1,3 @@
-# from collections import namedtuple
 
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
@@ -13,6 +12,8 @@ from .forms import SignupForm, LoginForm
 
 import requests
 import logging
+
+from .services import get_currency_rate
 
 
 # import logging
@@ -29,7 +30,7 @@ def home(request):
 def currency_view(request):
     url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
     response = requests.get(url)
-
+    # :TODO: move drive code to services
     if response.status_code == 200:
         exchange_rates = response.json()
 
@@ -50,6 +51,8 @@ def currency_view(request):
             if currency["cc"] == selected_currency:
                 currency_rate = currency["rate"]
                 break
+
+
 
         if currency_rate is not None:
             context = {
@@ -145,17 +148,18 @@ class ServiceListView(ListView):
 
 def action_list(request):
     request = request
+    rate = get_currency_rate()
+
     action_list = Action.objects.filter(user=request.user.id)
-    job_rate = CurrencyRate.rate
-    fake_data = action_list[0].service.time_hours
-    rate = type(job_rate)
+    time_list = Action.objects.filter(user=request.user.id).values("service__time_hours")
+    time_hours_floats = [float(item['service__time_hours']) * rate for item in time_list]
+
+    combined_list = zip(action_list, time_hours_floats)
+    rate = get_currency_rate()
 
     return render(request,
                   "services/action_list.html",
-                  {"action_list": action_list,
-                   "action_data": fake_data,
-                   "rate": rate,
-                   }
+                  {"combined_list": combined_list,}
                   )
 
 

@@ -13,7 +13,7 @@
                     <th>Earning</th>
                 </tr>
             </thead>
-            {% for action in action_list %}
+            {% for action, time in combined_list %}
                 <tr>
                     <th scope="row"></th>
                     <td>{{ action.service.date }}</td>
@@ -22,9 +22,9 @@
                     <td>{{ action.service.time_hours }}</td>
                     <td>
                         {% if action.manually_closed %}
-                            {{ rate }}
+                            {{ time }}
                         {% elif action.status == 'Closed' %}
-                            {{ rate }}
+                            {{ time }}
                         {% else %}
                             Service not closed yet
                         {% endif %}
