@@ -32,5 +32,6 @@ urlpatterns = [
     # Actions
     # path("actions/", views.ActionListView.as_view(), name="action_list"),
     path("actions/", views.action_list, name="action_list"),
-    path("action_close/<int:action_id>", views.action_close, name="action_close")
+    path("action_close/<int:action_id>", views.action_close, name="action_close"),
+    path("actions/<int:action_id>", views.action_delete, name="action_delete"),
 ]

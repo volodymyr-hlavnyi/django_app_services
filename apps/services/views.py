@@ -159,7 +159,8 @@ def action_list(request):
 
     return render(request,
                   "services/action_list.html",
-                  {"combined_list": combined_list,}
+                  {"combined_list": combined_list,
+                   "action_list": action_list}
                   )
 
 
@@ -241,6 +242,13 @@ def action_close(request, action_id):
         return redirect("services:action_list")
     return render(request, "services/action_close.html", {"action": action})
 
+def action_delete(request, action_id):
+    pass
+    action = Action.objects.filter(id=action_id)
+    if request.method == "POST":
+        action[0].delete()
+        return redirect("services:action_list")
+    return render(request, "services/action_delete.html", {"action": action})
 
 def signup_view(request):
     if request.method == "POST":
