@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
-from apps.services.models import Client, KindOfService, Service, User, Action
+from apps.services.models import Client, KindOfService, Service, User, Action, CurrencyRate
 from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm
 
 from django.contrib.auth import login, logout
@@ -143,29 +143,20 @@ class ServiceListView(ListView):
         return Service.objects.filter(user=self.request.user.id)
 
 
-# class ActionListView(ListView):
-#     model = Action
-#     context_object_name = "action_list"
-#
-#     def get_queryset(self):
-#         queryset = Action.objects.filter(user=self.request.user.id)
-#         fake_data = 'money'
-#
-#         # query_tuple = DataTuple(queryset, fake_data)
-#         query_list = [queryset, fake_data]
-#         return query_list
-
 def action_list(request):
     request = request
     action_list = Action.objects.filter(user=request.user.id)
-    fake_data = 'money'
+    job_rate = CurrencyRate.rate
+    fake_data = action_list[0].service.time_hours
+    rate = type(job_rate)
 
     return render(request,
                   "services/action_list.html",
                   {"action_list": action_list,
                    "action_data": fake_data,
+                   "rate": rate,
                    }
-    )
+                  )
 
 
 class ServiceCreateView(CreateView):

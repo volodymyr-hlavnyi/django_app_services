@@ -22,9 +22,9 @@
                     <td>{{ action.service.time_hours }}</td>
                     <td>
                         {% if action.manually_closed %}
-                            {{ action_data }}
+                            {{ rate }}
                         {% elif action.status == 'Closed' %}
-                            {{ action_data }}
+                            {{ rate }}
                         {% else %}
                             Service not closed yet
                         {% endif %}
