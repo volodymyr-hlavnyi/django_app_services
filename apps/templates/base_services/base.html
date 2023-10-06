@@ -1,15 +1,5 @@
 <!DOCTYPE html>
-{#<html lang="en" data-bs-theme="dark">#}
-{% if user.is_authenticated %}
-    {% if user.userprofile.visual_theme == 'dark' %}
-        <html lang="en" data-bs-theme="dark">
-    {% else %}
-        <html lang="en" data-bs-theme="light">
-    {% endif %}
-{% else %}
-    <html lang="en" data-bs-theme="light">
-{% endif %}
-
+<html lang="en" data-bs-theme="{% include "services/user_profile/user_theme.html" %}">
 
 <head>
     <meta charset="UTF-8">
@@ -33,18 +23,12 @@
 </head>
 
 <body>
+<p>
+{% include "services/user_profile/user_theme.html" %}
+</p>
 
 {#<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light" data-bs-theme="dark">#}
-{#<nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">#}
-{% if user.is_authenticated %}
-    {% if user.userprofile.visual_theme == 'dark' %}
-        <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="dark">
-    {% else %}
-        <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">
-    {% endif %}
-{% else %}
-    <nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="light">
-{% endif %}
+<nav class="navbar sticky-top navbar-expand-lg" data-bs-theme="{% include "services/user_profile/user_theme.html" %}">
 <a class="navbar-brand" href="{% url 'services:home' %}">
     <img src="{% static "logo/time_tracker_40.png" %}" class="img-fluid" alt="Time Tracker">
 </a>
@@ -124,17 +108,9 @@
 </div>
 
 {#Footer#}
-{#<nav class="navbar fixed-bottom navbar-expand-lg navbar-light bg-light" data-bs-theme="dark">#}
+<nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="{% include "services/user_profile/user_theme.html" %}">
 {#    <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">#}
-{% if user.is_authenticated %}
-    {% if user.userprofile.visual_theme == 'dark' %}
-        <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="dark">
-    {% else %}
-        <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">
-    {% endif %}
-{% else %}
-    <nav class="navbar fixed-bottom navbar-expand-lg" data-bs-theme="light">
-{% endif %}
+
 <button class="navbar-toggler" type="button" data-toggle="collapse"
         data-target="#navbarTogglerDemo01"
         aria-controls="navbarTogglerDemo01"
