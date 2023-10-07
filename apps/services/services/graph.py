@@ -46,3 +46,19 @@ def get_graph(float_list, client_list):
         logger.error(f"Graph error: Error in graph definition! - {e}")
 
     return result
+
+
+def add_suffix_to_duplicates(input_list):
+    seen = {}
+    result = []
+
+    for item in input_list:
+        if item in seen:
+            seen[item] += 1
+            new_item = f"{item}_{seen[item]}"
+            result.append(new_item)
+        else:
+            seen[item] = 0
+            result.append(item)
+
+    return result

@@ -34,7 +34,7 @@
                             {% if action.status == 'Started' %}
                                 <a href="{% url 'services:action_close' action.id %}" class="btn btn-outline-primary btn-sm">Close</a>
                             {% else %}
-                                <a href="{% url 'services:service_edit' action.service.id %}" class="btn btn-outline-primary btn-sm">Start</a>
+{#                                <a href="{% url 'services:service_edit' action.service.id %}" class="btn btn-outline-primary btn-sm">Start</a>#}
                             {% endif %}
                             <a href="{% url 'services:action_delete' action.id %}" class="btn btn-outline-primary btn-sm">Delete</a>
                         </div>

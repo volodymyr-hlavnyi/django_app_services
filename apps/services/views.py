@@ -1,4 +1,3 @@
-
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -13,7 +12,7 @@ from .forms import SignupForm, LoginForm
 import requests
 import logging
 
-from .services import get_currency_rate, get_graph
+from .services import get_currency_rate, get_graph, add_suffix_to_duplicates
 
 
 # import logging
@@ -51,8 +50,6 @@ def currency_view(request):
             if currency["cc"] == selected_currency:
                 currency_rate = currency["rate"]
                 break
-
-
 
         if currency_rate is not None:
             context = {
@@ -161,17 +158,18 @@ def action_list(request):
     closed_time_query = action_query.values("service__time_hours").filter(status='Closed')
     closed_earnings = [float(item['service__time_hours']) * rate for item in closed_time_query]
     client_list = list(closed_action_query.values_list('client__name', flat=True))
+    client_list = add_suffix_to_duplicates(client_list)
     graph = get_graph(closed_earnings, client_list)
     # logger.info(f"----- graph: {graph}")
 
     return render(request,
                   "services/action_list.html",
                   {
-                    "combined_list": combined_list,
-                    "action_list": action_query,
-                    "graph": graph,
+                      "combined_list": combined_list,
+                      "action_list": action_query,
+                      "graph": graph,
                   }
-    )
+                  )
 
 
 class ServiceCreateView(CreateView):
@@ -213,7 +211,7 @@ def service_delete(request, service_id):
                   {"service": service,
                    "service_kind": service_kind,
                    }
-    )
+                  )
 
 
 def kindofservice_delete(request, kind_id):
@@ -266,6 +264,7 @@ def action_close(request, action_id):
                    }
                   )
 
+
 def action_delete(request, action_id):
     pass
     action = Action.objects.filter(id=action_id)
@@ -280,6 +279,7 @@ def action_delete(request, action_id):
                    "client_name": client_name,
                    }
                   )
+
 
 def signup_view(request):
     if request.method == "POST":
