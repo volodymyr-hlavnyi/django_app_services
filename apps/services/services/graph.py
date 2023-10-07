@@ -18,8 +18,8 @@ def get_graph(float_list, client_list):
                 chart_max_value = 0
                 float_names = []
 
-            logger.info(f"----- float_names: {float_names}")
-            logger.info(f"----- float_list: {float_list}")
+            # logger.info(f"----- float_names: {float_names}")
+            # logger.info(f"----- float_list: {float_list}")
 
             fig, ax = plt.subplots()
 

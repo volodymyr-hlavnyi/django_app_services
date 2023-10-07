@@ -161,9 +161,8 @@ def action_list(request):
     closed_time_query = action_query.values("service__time_hours").filter(status='Closed')
     closed_earnings = [float(item['service__time_hours']) * rate for item in closed_time_query]
     client_list = list(closed_action_query.values_list('client__name', flat=True))
-    logger.info(f"----- client_list: {client_list}")
-    graph = get_graph(closed_earnings, client_list)    # :TODO: pass only closed actions
-    logger.info(f"----- graph: {graph}")
+    graph = get_graph(closed_earnings, client_list)
+    # logger.info(f"----- graph: {graph}")
 
     return render(request,
                   "services/action_list.html",
