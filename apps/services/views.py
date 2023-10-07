@@ -155,9 +155,9 @@ def action_list(request):
     time_hours_floats = [float(item['service__time_hours']) * rate for item in time_list]
 
     combined_list = zip(action_list, time_hours_floats)
-    rate = get_currency_rate()
+    # rate = get_currency_rate()
 
-    graph = get_graph()
+    graph = get_graph(time_hours_floats)
 
     return render(request,
                   "services/action_list.html",
