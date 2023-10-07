@@ -4,7 +4,7 @@ import logging
 from io import BytesIO
 
 
-def get_graph(float_list):
+def get_graph(float_list, client_list):
     logger = logging.getLogger("django")
     result = None
 
@@ -13,13 +13,10 @@ def get_graph(float_list):
 
             if len(float_list) > 0:
                 chart_max_value = max(float_list)
-                float_names = ['name' for _ in range(len(float_list))]
+                float_names = client_list
             else:
                 chart_max_value = 0
                 float_names = []
-
-            for i in range(len(float_list)):
-                float_names[i] = f'{float_names[i]} {i}'
 
             logger.info(f"----- float_names: {float_names}")
             logger.info(f"----- float_list: {float_list}")

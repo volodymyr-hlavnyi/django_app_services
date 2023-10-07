@@ -151,14 +151,17 @@ def action_list(request):
     request = request
     rate = get_currency_rate()
 
-    action_list = Action.objects.filter(user=request.user.id)
-    time_list = Action.objects.filter(user=request.user.id).values("service__time_hours")
-    time_hours_floats = [float(item['service__time_hours']) * rate for item in time_list]
+    action_query = Action.objects.filter(user=request.user.id)
+    time_query = action_query.values("service__time_hours")
+    client_list = list(action_query.values_list('client__name', flat=True))
+    logger.info(f"----- client_list: {client_list}")
 
-    combined_list = zip(action_list, time_hours_floats)
+    time_hours_floats = [float(item['service__time_hours']) * rate for item in time_query]
+
+    combined_list = zip(action_query, time_hours_floats)
     # rate = get_currency_rate()
 
-    graph = get_graph(time_hours_floats) # :TODO: pass only closed actions
+    graph = get_graph(time_hours_floats, client_list)    # :TODO: pass only closed actions
 
     logger.info(f"----- graph: {graph}")
 
@@ -166,7 +169,7 @@ def action_list(request):
                   "services/action_list.html",
                   {
                     "combined_list": combined_list,
-                    "action_list": action_list,
+                    "action_list": action_query,
                     "graph": graph,
                   }
     )
