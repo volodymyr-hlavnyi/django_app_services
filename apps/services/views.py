@@ -147,6 +147,7 @@ class ServiceListView(ListView):
 
 
 def action_list(request):
+    logger = logging.getLogger("django")
     request = request
     rate = get_currency_rate()
 
@@ -157,7 +158,9 @@ def action_list(request):
     combined_list = zip(action_list, time_hours_floats)
     # rate = get_currency_rate()
 
-    graph = get_graph(time_hours_floats)
+    graph = get_graph(time_hours_floats) # :TODO: pass only closed actions
+
+    logger.info(f"----- graph: {graph}")
 
     return render(request,
                   "services/action_list.html",
