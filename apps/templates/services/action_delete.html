@@ -3,10 +3,11 @@
 {% block content %}
     <h1>Delete Action</h1>
 
-    <p>Are you sure you want to delete action "{{ action.name }}"?</p>
+    <p>Are you sure you want to delete action for '{{ client_name }}' with 'Close Status' = "{{ action.manually_closed }}"?</p>
 
     <form method="post">
         {% csrf_token %}
         <button type="submit" class="btn btn-outline-danger">Yes, delete</button>
+        <a href="{% url 'services:action_list'%}" class="btn btn-outline-secondary">Cancel</a>
     </form>
 {% endblock %}

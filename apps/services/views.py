@@ -247,18 +247,32 @@ def client_info(request, client_id):
 
 def action_close(request, action_id):
     action = Action.objects.filter(id=action_id)
+    client_name = action[0].client.name
+
     if request.method == "POST":
         action[0].close()
         return redirect("services:action_list")
-    return render(request, "services/action_close.html", {"action": action})
+    return render(request,
+                  "services/action_close.html",
+                  {"action": action,
+                   "client_name": client_name,
+                   }
+                  )
 
 def action_delete(request, action_id):
     pass
     action = Action.objects.filter(id=action_id)
+    client_name = action[0].client.name
+
     if request.method == "POST":
         action[0].delete()
         return redirect("services:action_list")
-    return render(request, "services/action_delete.html", {"action": action})
+    return render(request,
+                  "services/action_delete.html",
+                  {"action": action[0],
+                   "client_name": client_name,
+                   }
+                  )
 
 def signup_view(request):
     if request.method == "POST":
