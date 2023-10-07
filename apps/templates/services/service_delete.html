@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Delete Service</h1>
 
-    <p>Are you sure you want to delete service "{{ service.name }}"?</p>
+    <p>Are you sure you want to delete service "{{ service_kind }}"?</p>
 
     <form method="post">
         {% csrf_token %}

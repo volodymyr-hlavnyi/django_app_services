@@ -203,10 +203,17 @@ def service_edit(request, service_id):
 
 def service_delete(request, service_id):
     service = get_object_or_404(Service, id=service_id)
+    service_kind = service.kind_of_service
+
     if request.method == "POST":
         service.delete()
         return redirect("services:service_list")
-    return render(request, "services/service_delete.html", {"service": service})
+    return render(request,
+                  "services/service_delete.html",
+                  {"service": service,
+                   "service_kind": service_kind,
+                   }
+    )
 
 
 def kindofservice_delete(request, kind_id):
