@@ -13,7 +13,7 @@ from .forms import SignupForm, LoginForm
 import requests
 import logging
 
-from .services import get_currency_rate
+from .services import get_currency_rate, get_graph
 
 
 # import logging
@@ -157,11 +157,16 @@ def action_list(request):
     combined_list = zip(action_list, time_hours_floats)
     rate = get_currency_rate()
 
+    graph = get_graph()
+
     return render(request,
                   "services/action_list.html",
-                  {"combined_list": combined_list,
-                   "action_list": action_list}
-                  )
+                  {
+                    "combined_list": combined_list,
+                    "action_list": action_list,
+                    "graph": graph,
+                  }
+    )
 
 
 class ServiceCreateView(CreateView):

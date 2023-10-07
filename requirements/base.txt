@@ -13,3 +13,5 @@ beautifulsoup4~=4.12.2
 
 # connector to PostgreSQL
 psycopg==3.1.12
+
+matplotlib==3.7.3
