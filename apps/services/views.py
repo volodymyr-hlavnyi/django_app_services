@@ -153,16 +153,16 @@ def action_list(request):
 
     action_query = Action.objects.filter(user=request.user.id)
     time_query = action_query.values("service__time_hours")
-    client_list = list(action_query.values_list('client__name', flat=True))
+    earnings = [float(item['service__time_hours']) * rate for item in time_query]
+
+    combined_list = zip(action_query, earnings)
+
+    closed_action_query = Action.objects.filter(user=request.user.id).filter(status='Closed')
+    closed_time_query = action_query.values("service__time_hours").filter(status='Closed')
+    closed_earnings = [float(item['service__time_hours']) * rate for item in closed_time_query]
+    client_list = list(closed_action_query.values_list('client__name', flat=True))
     logger.info(f"----- client_list: {client_list}")
-
-    time_hours_floats = [float(item['service__time_hours']) * rate for item in time_query]
-
-    combined_list = zip(action_query, time_hours_floats)
-    # rate = get_currency_rate()
-
-    graph = get_graph(time_hours_floats, client_list)    # :TODO: pass only closed actions
-
+    graph = get_graph(closed_earnings, client_list)    # :TODO: pass only closed actions
     logger.info(f"----- graph: {graph}")
 
     return render(request,
