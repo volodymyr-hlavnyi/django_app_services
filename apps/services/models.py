@@ -79,11 +79,14 @@ class Service(models.Model):
     def save(self, *args, **kwargs):
         super().save()
 
-        Action.objects.create(
-            user=self.user,
-            service=Service.objects.get(pk=self.pk),
-            client=self.client,
-        )
+        if Action.objects.filter(user=self.user, service=Service.objects.get(pk=self.pk), client=self.client).exists():
+            pass
+        else:
+            Action.objects.create(
+                user=self.user,
+                service=Service.objects.get(pk=self.pk),
+                client=self.client,
+            )
 
     class Meta:
         ordering = ["-date", "date"]
