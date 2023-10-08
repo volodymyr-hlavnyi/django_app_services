@@ -1,4 +1,3 @@
-from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
@@ -6,6 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
+from apps.services.models.currency import CurrencyRate
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
 from apps.services.models.service import Service, Action
@@ -17,7 +17,6 @@ from .forms import SignupForm, LoginForm
 import requests
 
 from .models.userprofile import UserProfile
-from .tasks import example_1
 
 from django.contrib.auth import get_user_model
 
@@ -57,21 +56,16 @@ def currency_view(request):
             if currency["cc"] == selected_currency:
                 currency_rate = currency["rate"]
                 break
-        try:
-            result: AsyncResult = example_1.delay("Hello, world!")
-        except Exception:
-            return render(
-                request,
-                "services/currency_template.html",
-                {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
-            )
 
         if currency_rate is not None:
+            # Создайте и сохраните экземпляр модели CurrencyRate
+            rate_entry = CurrencyRate(currency_code=selected_currency, rate=currency_rate)
+            rate_entry.save()
+
             context = {
                 "available_currencies": available_currencies,
                 "selected_currency": selected_currency,
                 "currency_rate": currency_rate,
-                "result_id": result.id,
             }
             return render(request, "services/currency_template.html", context)
         else:
