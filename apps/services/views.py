@@ -1,6 +1,9 @@
+# import logging
+
 from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+
+# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -17,6 +20,7 @@ from .forms import SignupForm, LoginForm
 import requests
 
 from .models.userprofile import UserProfile
+from .services import get_currency_rate, add_suffix_to_duplicates, get_graph
 from .tasks import example_1
 
 from django.contrib.auth import get_user_model
@@ -37,47 +41,42 @@ def currency_view(request):
     url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
     response = requests.get(url)
 
-    if response.status_code == 200:
-        exchange_rates = response.json()
-
-        # Получите список всех доступных валют
-        available_currencies = [currency["cc"] for currency in exchange_rates]
-
-        selected_currency = request.GET.get("currency", "USD")  # По умолчанию USD
-
-        # Проверьте, выбрана ли валюта из списка доступных
-        if selected_currency not in available_currencies:
-            return render(
-                request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"}
-            )
-
-        currency_rate = None
-
-        for currency in exchange_rates:
-            if currency["cc"] == selected_currency:
-                currency_rate = currency["rate"]
-                break
-        try:
-            result: AsyncResult = example_1.delay("Hello, world!")
-        except Exception:
-            return render(
-                request,
-                "services/currency_template.html",
-                {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
-            )
-
-        if currency_rate is not None:
-            context = {
-                "available_currencies": available_currencies,
-                "selected_currency": selected_currency,
-                "currency_rate": currency_rate,
-                "result_id": result.id,
-            }
-            return render(request, "services/currency_template.html", context)
-        else:
-            return render(request, "services/currency_template.html", {"error_message": "Курс валюты не найден"})
-    else:
+    if response.status_code != 200:
         return render(request, "services/currency_template.html", {"error_message": "Не удалось получить доступ к API"})
+    exchange_rates = response.json()
+
+    # Получите список всех доступных валют
+    available_currencies = [currency["cc"] for currency in exchange_rates]
+
+    selected_currency = request.GET.get("currency", "USD")  # По умолчанию USD
+
+    # Проверьте, выбрана ли валюта из списка доступных
+    if selected_currency not in available_currencies:
+        return render(request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"})
+
+    currency_rate = next(
+        (currency["rate"] for currency in exchange_rates if currency["cc"] == selected_currency),
+        None,
+    )
+    try:
+        result: AsyncResult = example_1.delay("Hello, world!")
+    except Exception:
+        return render(
+            request,
+            "services/currency_template.html",
+            {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
+        )
+
+    if currency_rate is not None:
+        context = {
+            "available_currencies": available_currencies,
+            "selected_currency": selected_currency,
+            "currency_rate": currency_rate,
+            "result_id": result.id,
+        }
+        return render(request, "services/currency_template.html", context)
+    else:
+        return render(request, "services/currency_template.html", {"error_message": "Курс валюты не найден"})
 
 
 def client_edit(request, client_id):
@@ -153,31 +152,40 @@ class ServiceListView(ListView):
         return Service.objects.filter(user=self.request.user.id)
 
 
-class ActionListView(ListView):
-    model = Action
-    context_object_name = "action_list"
+def action_list(request):
+    # logger = logging.getLogger("django")
+    request = request
+    rate = get_currency_rate()
 
-    def get_queryset(self):
-        return Action.objects.filter(user=self.request.user.id)
+    action_query = Action.objects.filter(user=request.user.id)
+    time_query = action_query.values("service__time_hours")
+    earnings = [float(item["service__time_hours"]) * rate for item in time_query]
+
+    combined_list = zip(action_query, earnings)
+
+    closed_action_query = Action.objects.filter(user=request.user.id).filter(status="Closed")
+    closed_time_query = action_query.values("service__time_hours").filter(status="Closed")
+    closed_earnings = [float(item["service__time_hours"]) * rate for item in closed_time_query]
+    client_list = list(closed_action_query.values_list("client__name", flat=True))
+    client_list = add_suffix_to_duplicates(client_list)
+    graph = get_graph(closed_earnings, client_list)
+    # logger.info(f"----- graph: {graph}")
+
+    return render(
+        request,
+        "services/action_list.html",
+        {
+            "combined_list": combined_list,
+            "action_list": action_query,
+            "graph": graph,
+        },
+    )
 
 
-class ServiceCreateView(LoginRequiredMixin, CreateView):
+class ServiceCreateView(CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
-
-    #   class Meta:
-    #        client = Client.objects.filter(user=self.request.user.id)
-    # def get_initial(self):
-    #     initial = super().get_initial()
-    #     initial["client"] = Client.objects.filter(user=self.request.user)
-    #     initial["kind_of_service"] = KindOfService.objects.filter(user=self.request.user)
-    #     return initial
-    # def init
-    # def __init__(self, *args, **kwargs):
-    #     super(ServiceCreateView, self).__init__(*args, **kwargs)
-    #     self.fields['client'].queryset = Client.objects.filter(user=self.request.user_id)
-    #     self.fields['kind_of_service'].queryset = KindOfService.objects.filter(user=self.request.user_id)
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -281,6 +289,41 @@ def client_info(request, client_id):
         request=request,
         template_name="services/client_info.html",
         context={"client": client, "service_kinds": service_kinds},
+    )
+
+
+def action_close(request, action_id):
+    action = Action.objects.filter(id=action_id)
+    client_name = action[0].client.name
+
+    if request.method == "POST":
+        action[0].close()
+        return redirect("services:action_list")
+    return render(
+        request,
+        "services/action_close.html",
+        {
+            "action": action,
+            "client_name": client_name,
+        },
+    )
+
+
+def action_delete(request, action_id):
+    # pass
+    action = Action.objects.filter(id=action_id)
+    client_name = action[0].client.name
+
+    if request.method == "POST":
+        action[0].delete()
+        return redirect("services:action_list")
+    return render(
+        request,
+        "services/action_delete.html",
+        {
+            "action": action[0],
+            "client_name": client_name,
+        },
     )
 
 
