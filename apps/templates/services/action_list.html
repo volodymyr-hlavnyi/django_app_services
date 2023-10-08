@@ -9,15 +9,50 @@
                     <th>date</th>
                     <th>client</th>
                     <th>Status</th>
+                    <th>Hours</th>
+                    <th>Earning</th>
                 </tr>
             </thead>
-            {% for action in action_list %}
+            {% for action, time in combined_list %}
                 <tr>
                     <th scope="row"></th>
                     <td>{{ action.service.date }}</td>
                     <td>{{ action.client }}</td>
                     <td>{{ action.status }}</td>
+                    <td>{{ action.service.time_hours }}</td>
+                    <td>
+                        {% if action.manually_closed %}
+                            {{ time }}
+                        {% elif action.status == 'Closed' %}
+                            {{ time }}
+                        {% else %}
+                            Service not closed yet
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div>
+                            {% if action.status == 'Started' %}
+                                <a href="{% url 'services:action_close' action.id %}" class="btn btn-outline-primary btn-sm">Close</a>
+                            {% else %}
+{#                                <a href="{% url 'services:service_edit' action.service.id %}" class="btn btn-outline-primary btn-sm">Start</a>#}
+                            {% endif %}
+                            <a href="{% url 'services:action_delete' action.id %}" class="btn btn-outline-primary btn-sm">Delete</a>
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
+    <div>
+        <p>
+            <h3>Earning Track</h3>
+        <p>
+        <p>
+            {% if graph %}
+                <img src="data:image/png;base64,{{ graph }}" alt="Matplotlib Graph" class="blog-image">
+            {% else %}
+                No data to show track.
+            {% endif %}
+        </p>
+
+    </div>
 {% endblock %}

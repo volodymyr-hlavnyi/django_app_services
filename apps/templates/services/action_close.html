@@ -1,0 +1,13 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+    <h1>Close Action</h1>
+
+    <p>Are you sure you want to close action for '{{ client_name }}'?</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-outline-danger">Yes, close</button>
+        <a href="{% url 'services:action_list'%}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+{% endblock %}

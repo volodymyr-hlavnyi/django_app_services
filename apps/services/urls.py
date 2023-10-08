@@ -30,7 +30,10 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("logout/", views.logout_view, name="logout"),
     # Actions
-    path("actions/", views.ActionListView.as_view(), name="action_list"),
+    # path("actions/", views.ActionListView.as_view(), name="action_list"),
+    path("actions/", views.action_list, name="action_list"),
+    path("action_close/<int:action_id>", views.action_close, name="action_close"),
+    path("actions/<int:action_id>", views.action_delete, name="action_delete"),
     # User (settings)
     path("edit_userprofile/<int:user_id>", views.userprofile_edit, name="userprofile_edit"),
 ]
