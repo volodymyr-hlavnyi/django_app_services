@@ -1,5 +1,6 @@
 from django.db import models
-from datetime import datetime
+
+# from datetime import datetime
 
 from django.contrib.auth import get_user_model
 
@@ -34,11 +35,14 @@ class Service(models.Model):
     def save(self, *args, **kwargs):
         super().save()
 
-        Action.objects.create(
-            user=self.user,
-            service=Service.objects.get(pk=self.pk),
-            client=self.client,
-        )
+        if Action.objects.filter(user=self.user, service=Service.objects.get(pk=self.pk), client=self.client).exists():
+            pass
+        else:
+            Action.objects.create(
+                user=self.user,
+                service=Service.objects.get(pk=self.pk),
+                client=self.client,
+            )
 
     class Meta:
         ordering = ["-date", "date"]
@@ -51,14 +55,10 @@ class Action(models.Model):
     status = models.CharField(max_length=10, default="Started")
     manually_closed = models.BooleanField(default=False)
 
+    def close(self):
+        self.status = "Closed"
+        self.manually_closed = True
+        super().save()
+
     def save(self, *args, **kwargs):
-        current_date = datetime.now()
-
-        if not self.manually_closed:
-            # if current_date >= self.service.date + self.service.time_hours:
-            if current_date:  # >= self.service.date + timedelta(days=1):
-                self.status = "Expired"
-        else:
-            self.status = "Closed"
-
         super().save()
