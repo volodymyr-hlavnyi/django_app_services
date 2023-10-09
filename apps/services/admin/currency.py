@@ -9,7 +9,6 @@ class RefOfCurrencyAdmin(admin.ModelAdmin):
         "user",
         "name",
         "code",
-        "name_special",
         "last_updated",
     )
 
@@ -17,7 +16,6 @@ class RefOfCurrencyAdmin(admin.ModelAdmin):
         "user",
         "name",
         "code",
-        "name_special",
         "last_updated",
     )
 
