@@ -1,0 +1,12 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+  <h3>Delete Currency</h3>
+  <p>Are you sure you want to delete the Currency "{{ service.name }}"?</p>
+
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-outline-danger">Delete</button>
+    <a href="{% url 'services:currency_view' %}" class="btn btn-outline-secondary">Cancel</a>
+  </form>
+{% endblock %}

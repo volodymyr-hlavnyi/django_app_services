@@ -1,0 +1,12 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+    <h3>Edit Currency</h3>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-outline-primary">Save</button>
+        <a href="{% url 'services:currency_view' %}" class="btn btn-outline-secondary">Cancel</a>
+    </form>
+{% endblock %}

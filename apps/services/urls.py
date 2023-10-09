@@ -13,8 +13,6 @@ urlpatterns = [
     path("edit/<int:client_id>/", views.client_edit, name="client_edit"),
     path("info/<int:client_id>/", views.client_info, name="client_info"),
     path("delete/<int:client_id>/", views.client_delete, name="client_delete"),
-    # Currency
-    path("currency/", views.currency_view, name="currency_view"),
     # KindOfService
     path("list_kind/", views.KindOfServiceListView.as_view(), name="kindofservice_list"),
     path("create_kind/", views.KindOfServiceCreateView.as_view(), name="kindofservice_create"),
@@ -36,4 +34,16 @@ urlpatterns = [
     path("actions/<int:action_id>", views.action_delete, name="action_delete"),
     # User (settings)
     path("edit_userprofile/<int:user_id>", views.userprofile_edit, name="userprofile_edit"),
+    # Currency
+    # path("currency/", views.currency_view, name="currency_view"),
+    # Reference of Currency
+    path("currency/", views.CurrencyListView.as_view(), name="currency_view"),
+    path("currency_edit/<int:currency_id>", views.currency_edit_view, name="currency_edit"),
+    path("currency_delete/<int:currency_id>", views.currency_delete_view, name="currency_delete"),
+    path("currency_create/", views.CurrencyCreateView.as_view(), name="currency_create"),
+    # Currency Rate
+    path("currencyrate/", views.CurrencyRateListView.as_view(), name="currencyrate_view"),
+    path("currencyrate_edit/<int:currencyrate_id>", views.currency_rate_edit_view, name="currencyrate_edit"),
+    path("currencyrate_delete/<int:currencyrate_id>", views.currency_rate_delete_view, name="currencyrate_delete"),
+    path("currencyrate_create/", views.CurrencyRateCreateView.as_view(), name="currencyrate_create"),
 ]

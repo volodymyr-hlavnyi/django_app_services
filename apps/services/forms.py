@@ -51,3 +51,15 @@ class SignupForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     class Meta:
         model = User
+
+
+class CurrencyForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ["name"]
+
+
+class CurrencyRateForm(forms.ModelForm):
+    class Meta:
+        model = Client
+        fields = ["name"]

@@ -158,6 +158,8 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
+# we have rabbitmq, not redis
+# strange string ???
 CELERY_RESULT_BACKEND = "redis://localhost:6379/0"  # URL для хранения результатов задач
 
 CELERY_BEAT_SCHEDULE = {

@@ -1,0 +1,19 @@
+{% extends "base_services/base.html" %}
+
+{% block content %}
+    <h3> Currency Rate </h3>
+    <a href="{% url 'services:currencyrate_create' %}" class="btn btn-outline-success mt-2">Add Currency Rate</a>
+
+    <ul class="list-group">
+        {% for kind in currency_list %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ kind.name }}
+                {{ kind.code }}
+                <div>
+                    <a href="{% url 'services:currencyrate_edit' kind.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
+                    <a href="{% url 'services:currencyrate_delete' kind.id %}" class="btn btn-outline-danger btn-sm">Delete</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

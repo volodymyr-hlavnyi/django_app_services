@@ -13,13 +13,14 @@ from django.views.generic import CreateView, ListView
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
 from apps.services.models.service import Service, Action
-from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm, UserProfileForm
+from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm, UserProfileForm, CurrencyForm
 
 from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
 
 import requests
 
+from .models.currency import CurrencyRate, RefOfCurrency
 from .models.userprofile import UserProfile
 from .additionally import get_currency_rate, add_suffix_to_duplicates, get_graph
 from .tasks import example_1
@@ -43,7 +44,9 @@ def currency_view(request):
     response = requests.get(url)
 
     if response.status_code != 200:
-        return render(request, "services/currency_template.html", {"error_message": "Не удалось получить доступ к API"})
+        return render(
+            request, "services/currency/currency_template.html", {"error_message": "Не удалось получить доступ к API"}
+        )
     exchange_rates = response.json()
 
     # Получите список всех доступных валют
@@ -53,7 +56,9 @@ def currency_view(request):
 
     # Проверьте, выбрана ли валюта из списка доступных
     if selected_currency not in available_currencies:
-        return render(request, "services/currency_template.html", {"error_message": "Выбранной валюты нет в списке"})
+        return render(
+            request, "services/currency/currency_template.html", {"error_message": "Выбранной валюты нет в списке"}
+        )
 
     currency_rate = next(
         (currency["rate"] for currency in exchange_rates if currency["cc"] == selected_currency),
@@ -64,7 +69,7 @@ def currency_view(request):
     except Exception:
         return render(
             request,
-            "services/currency_template.html",
+            "services/currency/currency_template.html",
             {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
         )
 
@@ -75,9 +80,9 @@ def currency_view(request):
             "currency_rate": currency_rate,
             "result_id": result.id,
         }
-        return render(request, "services/currency_template.html", context)
+        return render(request, "services/currency/currency_template.html", context)
     else:
-        return render(request, "services/currency_template.html", {"error_message": "Курс валюты не найден"})
+        return render(request, "services/currency/currency_template.html", {"error_message": "Курс валюты не найден"})
 
 
 def client_edit(request, client_id):
@@ -92,7 +97,7 @@ def client_edit(request, client_id):
     else:
         form = ClientForm(instance=client)
 
-    return render(request, "services/client_edit.html", {"form": form, "client": client})
+    return render(request, "services/client/client_edit.html", {"form": form, "client": client})
 
 
 def client_delete(request, client_id):
@@ -102,13 +107,14 @@ def client_delete(request, client_id):
         client.delete()
         return redirect("services:client_list")
 
-    return render(request, "services/client_delete.html", {"client": client})
+    return render(request, "services/client/client_delete.html", {"client": client})
 
 
 class ClientsCreateView(CreateView):
     model = Client
     fields = ("name",)
     success_url = reverse_lazy("services:client_list")
+    template_name = "services/client/client_create.html"
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -120,6 +126,7 @@ class ClientsCreateView(CreateView):
 class ClientListView(ListView):
     model = Client
     context_object_name = "client_list"
+    template_name = "services/client/client_list.html"
 
     def get_queryset(self):
         return Client.objects.filter(user=self.request.user.id)
@@ -128,6 +135,7 @@ class ClientListView(ListView):
 class KindOfServiceListView(ListView):
     model = KindOfService
     context_object_name = "kindofservice_list"
+    template_name = "services/kindofservice/kindofservice_list.html"
 
     def get_queryset(self):
         return KindOfService.objects.filter(user=self.request.user.id)
@@ -137,6 +145,7 @@ class KindOfServiceCreateView(CreateView):
     model = KindOfService
     fields = ("name",)
     success_url = reverse_lazy("services:kindofservice_list")
+    template_name = "services/kindofservice/kindofservice_create.html"
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -148,6 +157,7 @@ class KindOfServiceCreateView(CreateView):
 class ServiceListView(ListView):
     model = Service
     context_object_name = "service_list"
+    template_name = "services/service/service_list.html"
 
     def get_queryset(self):
         return Service.objects.filter(user=self.request.user.id)
@@ -174,7 +184,7 @@ def action_list(request):
 
     return render(
         request,
-        "services/action_list.html",
+        "services/action/action_list.html",
         {
             "combined_list": combined_list,
             "action_list": action_query,
@@ -187,6 +197,7 @@ class ServiceCreateView(CreateView):
     model = Service
     fields = ("date", "client", "kind_of_service", "time_hours")
     success_url = reverse_lazy("services:service_list")
+    template_name = "services/service/service_create.html"
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
@@ -208,7 +219,7 @@ def service_edit(request, service_id):
     else:
         form = ServiceForm(instance=service)
 
-    return render(request, "services/service_edit.html", {"form": form, "service": service})
+    return render(request, "services/service/service_edit.html", {"form": form, "service": service})
 
 
 @login_required
@@ -245,7 +256,7 @@ def service_delete(request, service_id):
     if request.method == "POST":
         service.delete()
         return redirect("services:service_list")
-    return render(request, "services/service_delete.html", {"service": service})
+    return render(request, "services/service/service_delete.html", {"service": service})
 
 
 def kindofservice_delete(request, kind_id):
@@ -253,7 +264,7 @@ def kindofservice_delete(request, kind_id):
     if request.method == "POST":
         kind.delete()
         return redirect("services:kindofservice_list")
-    return render(request, "services/kindofservice_delete.html", {"client": kind})
+    return render(request, "services/kindofservice/kindofservice_delete.html", {"client": kind})
 
 
 @login_required
@@ -269,7 +280,7 @@ def kindofservice_edit(request, kind_id):
     else:
         form = KindOfServiceForm(instance=kind)
 
-    return render(request, "services/kindofservice_edit.html", {"form": form, "kind": kind})
+    return render(request, "services/kindofservice/kindofservice_edit.html", {"form": form, "kind": kind})
 
 
 def client_info(request, client_id):
@@ -288,7 +299,7 @@ def client_info(request, client_id):
 
     return render(
         request=request,
-        template_name="services/client_info.html",
+        template_name="services/client/client_info.html",
         context={"client": client, "service_kinds": service_kinds},
     )
 
@@ -302,7 +313,7 @@ def action_close(request, action_id):
         return redirect("services:action_list")
     return render(
         request,
-        "services/action_close.html",
+        "services/action/action_close.html",
         {
             "action": action,
             "client_name": client_name,
@@ -320,7 +331,7 @@ def action_delete(request, action_id):
         return redirect("services:action_list")
     return render(
         request,
-        "services/action_delete.html",
+        "services/action/action_delete.html",
         {
             "action": action[0],
             "client_name": client_name,
@@ -357,3 +368,101 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("home")
+
+
+class CurrencyRateListView(ListView):
+    model = CurrencyRate
+    context_object_name = "currencyrate_list"
+    template_name = "services/currency/currencyrate_list.html"
+
+    def get_queryset(self):
+        return CurrencyRate.objects.filter(user=self.request.user.id)
+
+
+class CurrencyRateCreateView(CreateView):
+    model = CurrencyRate
+    fields = ("currency", "rate", "date")
+    success_url = reverse_lazy("services:currencyrate_list")
+    template_name = "services/currency/currencyrate_create.html"
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class CurrencyRateForm:
+    pass
+
+
+def currency_rate_edit_view(request, currencyrate_id):
+    currencyrate = get_object_or_404(CurrencyRate, pk=currencyrate_id)
+
+    if request.method == "POST":
+        form = CurrencyRateForm(request.POST, instance=currencyrate)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
+            return redirect("services:currencyrate_list")
+    else:
+        form = CurrencyRateForm(instance=currencyrate)
+
+    return render(request, "services/currency/currencyrate_edit.html", {"form": form, "currencyrate": currencyrate})
+
+
+def currency_rate_delete_view(request, currencyrate_id):
+    currencyrate = get_object_or_404(CurrencyRate, pk=currencyrate_id)
+
+    if request.method == "POST":
+        currencyrate.delete()
+        return redirect("services:currencyrate_list")
+
+    return render(request, "services/currency/currencyrate_delete.html", {"currencyrate": currencyrate})
+
+
+class CurrencyListView(ListView):
+    model = RefOfCurrency
+    context_object_name = "currency_list"
+    template_name = "services/currency/currency_list.html"
+
+    def get_queryset(self):
+        return RefOfCurrency.objects.filter(user=self.request.user.id)
+
+
+class CurrencyCreateView(CreateView):
+    model = RefOfCurrency
+    fields = ("name", "code")
+    success_url = reverse_lazy("services:currency_list")
+    template_name = "services/currency/currency_create.html"
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.user = self.request.user
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+def currency_edit_view(request, currency_id):
+    currency = get_object_or_404(RefOfCurrency, pk=currency_id)
+
+    if request.method == "POST":
+        form = CurrencyForm(request.POST, instance=currency)
+        if form.is_valid():
+            form.user = request.user
+            form.save()
+            return redirect("services:currency_list")
+    else:
+        form = CurrencyForm(instance=currency)
+
+    return render(request, "services/currency/currency_edit.html", {"form": form, "currency": currency})
+
+
+def currency_delete_view(request, currency_id):
+    currency = get_object_or_404(RefOfCurrency, pk=currency_id)
+
+    if request.method == "POST":
+        currency.delete()
+        return redirect("services:currency_list")
+
+    return render(request, "services/currency/currency_delete.html", {"currency": currency})
