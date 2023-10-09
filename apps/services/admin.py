@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
-from apps.services.models.service import Service
+from apps.services.models.service import Service, Action
 from apps.services.models.userprofile import UserProfile
 
 
@@ -61,6 +61,17 @@ class ServiceAdmin(admin.ModelAdmin):
 #        ClientInline,
 #        KindOfServiceInline,
 #    ]
+
+
+@admin.register(Action)
+class ActionAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",  # "user",
+        "service",  # "service",
+        "client",  # "client",
+        "status",
+        "manually_closed",
+    )
 
 
 @admin.register(UserProfile)

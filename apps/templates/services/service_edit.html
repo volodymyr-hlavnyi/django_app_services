@@ -5,7 +5,10 @@
 
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+
+{#        <input type="date" id="date" value="2023-01-01">#}
+
+        {{ form.as_p}}
 
         <button type="submit" class="btn btn-outline-primary">Save</button>
         <a href="{% url 'services:service_delete' service.id %}" class="btn btn-outline-danger">Delete</a>
