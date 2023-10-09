@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
+# from apps.services.models.currency import CurrencyRate
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
 from apps.services.models.service import Service, Action
@@ -20,7 +21,7 @@ from .forms import SignupForm, LoginForm
 import requests
 
 from .models.userprofile import UserProfile
-from .services import get_currency_rate, add_suffix_to_duplicates, get_graph
+from .additionally import get_currency_rate, add_suffix_to_duplicates, get_graph
 from .tasks import example_1
 
 from django.contrib.auth import get_user_model

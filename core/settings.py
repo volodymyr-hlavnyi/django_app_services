@@ -10,10 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import string
+from datetime import timedelta
 from pathlib import Path
 
 import environ
-from celery.schedules import crontab
+
+# from celery.schedules import crontab
 from django.utils.crypto import get_random_string
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -31,14 +33,12 @@ SECRET_KEY = env.str(
     "DJANGO__SECRET_KEY", get_random_string(64, "".join([string.ascii_letters, string.digits, string.punctuation]))
 )
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool("DJANGO__DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("DJANGO__ALLOWED_HOSTS", default=[])
 if DEBUG:
     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
-
 
 # Application definition
 
@@ -96,7 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "core.wsgi.application"
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -148,7 +147,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -160,11 +158,22 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
+CELERY_RESULT_BACKEND = "redis://localhost:6379/0"  # URL для хранения результатов задач
 
 CELERY_BEAT_SCHEDULE = {
-    "test_task": {
-        "task": "apps.services.tasks.example_2.example_2",
-        "schedule": crontab(minute="*/1"),  # every minute
-        # 'schedule': crontab(hour='*/21'),  # every 21 hour
+    "fetch-currency-every-24-hours": {
+        "task": "apps.services.tasks.currency",
+        "schedule": timedelta(minutes=5),  # Запускать каждые 24 часа
     },
 }
+
+# 1
+# celery -A core worker --loglevel=info
+
+# CELERY_BEAT_SCHEDULE = {
+#     "test_task": {
+#         "task": "apps.services.tasks.example_2.example_2",
+#         "schedule": crontab(minute="*/1"),  # every minute
+#         # 'schedule': crontab(hour='*/21'),  # every 21 hour
+#     },
+# }
