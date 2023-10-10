@@ -19,4 +19,5 @@ celery==5.3.4
 django-celery-beat==2.5.0
 
 # Graphics nice
+# last 3.8.0
 matplotlib==3.7.3
