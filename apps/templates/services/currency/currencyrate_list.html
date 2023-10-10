@@ -8,8 +8,10 @@
         {% for item in currencyrate_list %}
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 {{ item.currency }}
+                <p> </p>
                 {{ item.rate }}
-                {{ item.date }}
+                <p> </p>
+                {{ item.date|date:"d-m-Y" }}
                 <div>
                     <a href="{% url 'services:currencyrate_edit' item.id %}" class="btn btn-outline-primary btn-sm">Edit</a>
                     <a href="{% url 'services:currencyrate_delete' item.id %}" class="btn btn-outline-danger btn-sm">Delete</a>

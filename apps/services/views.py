@@ -13,7 +13,14 @@ from django.views.generic import CreateView, ListView
 from apps.services.models.client import Client
 from apps.services.models.kindofservice import KindOfService
 from apps.services.models.service import Service, Action
-from apps.services.forms import ClientForm, KindOfServiceForm, ServiceForm, UserProfileForm, CurrencyForm
+from apps.services.forms import (
+    ClientForm,
+    KindOfServiceForm,
+    ServiceForm,
+    UserProfileForm,
+    CurrencyForm,
+    CurrencyRateForm,
+)
 
 from django.contrib.auth import login, logout
 from .forms import SignupForm, LoginForm
@@ -390,10 +397,6 @@ class CurrencyRateCreateView(CreateView):
         self.object.user = self.request.user
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
-
-
-class CurrencyRateForm:
-    pass
 
 
 def currency_rate_edit(request, currencyrate_id):

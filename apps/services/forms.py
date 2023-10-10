@@ -1,6 +1,7 @@
 from django import forms
 
 from .models.client import Client
+from .models.currency import CurrencyRate, RefOfCurrency
 from .models.kindofservice import KindOfService
 from .models.service import Service
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -55,11 +56,11 @@ class LoginForm(AuthenticationForm):
 
 class CurrencyForm(forms.ModelForm):
     class Meta:
-        model = Client
-        fields = ["name"]
+        model = RefOfCurrency
+        fields = ["name", "code"]
 
 
 class CurrencyRateForm(forms.ModelForm):
     class Meta:
-        model = Client
-        fields = ["name"]
+        model = CurrencyRate
+        fields = ["date", "currency", "rate"]
