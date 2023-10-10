@@ -7,6 +7,6 @@
   <form method="post">
     {% csrf_token %}
     <button type="submit" class="btn btn-outline-danger">Delete</button>
-    <a href="{% url 'services:currency_view' %}" class="btn btn-outline-secondary">Cancel</a>
+    <a href="{% url 'services:currency_list' %}" class="btn btn-outline-secondary">Cancel</a>
   </form>
 {% endblock %}

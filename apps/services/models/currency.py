@@ -29,7 +29,7 @@ class RefOfCurrency(models.Model):
     last_updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        verbose_name_plural = "Reference of Currencies"
+        verbose_name_plural = "Currency ($,€,£,etc.)"
 
     def __str__(self):
         return f"{self.name} ({self.code} )"

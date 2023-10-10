@@ -37,13 +37,13 @@ urlpatterns = [
     # Currency
     # path("currency/", views.currency_view, name="currency_view"),
     # Reference of Currency
-    path("currency/", views.CurrencyListView.as_view(), name="currency_view"),
-    path("currency_edit/<int:currency_id>", views.currency_edit_view, name="currency_edit"),
-    path("currency_delete/<int:currency_id>", views.currency_delete_view, name="currency_delete"),
+    path("currency/", views.CurrencyListView.as_view(), name="currency_list"),
     path("currency_create/", views.CurrencyCreateView.as_view(), name="currency_create"),
+    path("currency_edit/<int:currency_id>", views.currency_edit, name="currency_edit"),
+    path("currency_delete/<int:currency_id>", views.currency_delete, name="currency_delete"),
     # Currency Rate
-    path("currencyrate/", views.CurrencyRateListView.as_view(), name="currencyrate_view"),
-    path("currencyrate_edit/<int:currencyrate_id>", views.currency_rate_edit_view, name="currencyrate_edit"),
-    path("currencyrate_delete/<int:currencyrate_id>", views.currency_rate_delete_view, name="currencyrate_delete"),
+    path("currencyrate/", views.CurrencyRateListView.as_view(), name="currencyrate_list"),
     path("currencyrate_create/", views.CurrencyRateCreateView.as_view(), name="currencyrate_create"),
+    path("currencyrate_edit/<int:currencyrate_id>", views.currency_rate_edit, name="currencyrate_edit"),
+    path("currencyrate_delete/<int:currencyrate_id>", views.currency_rate_delete, name="currencyrate_delete"),
 ]

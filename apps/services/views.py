@@ -396,7 +396,7 @@ class CurrencyRateForm:
     pass
 
 
-def currency_rate_edit_view(request, currencyrate_id):
+def currency_rate_edit(request, currencyrate_id):
     currencyrate = get_object_or_404(CurrencyRate, pk=currencyrate_id)
 
     if request.method == "POST":
@@ -411,7 +411,7 @@ def currency_rate_edit_view(request, currencyrate_id):
     return render(request, "services/currency/currencyrate_edit.html", {"form": form, "currencyrate": currencyrate})
 
 
-def currency_rate_delete_view(request, currencyrate_id):
+def currency_rate_delete(request, currencyrate_id):
     currencyrate = get_object_or_404(CurrencyRate, pk=currencyrate_id)
 
     if request.method == "POST":
@@ -443,7 +443,7 @@ class CurrencyCreateView(CreateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-def currency_edit_view(request, currency_id):
+def currency_edit(request, currency_id):
     currency = get_object_or_404(RefOfCurrency, pk=currency_id)
 
     if request.method == "POST":
@@ -458,7 +458,7 @@ def currency_edit_view(request, currency_id):
     return render(request, "services/currency/currency_edit.html", {"form": form, "currency": currency})
 
 
-def currency_delete_view(request, currency_id):
+def currency_delete(request, currency_id):
     currency = get_object_or_404(RefOfCurrency, pk=currency_id)
 
     if request.method == "POST":
