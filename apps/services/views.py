@@ -252,7 +252,7 @@ def userprofile_edit(request, user_id):
 
 
 def service_delete(request, service_id):
-    service = get_object_or_404(KindOfService, id=service_id)
+    service = get_object_or_404(Service, id=service_id)
     if request.method == "POST":
         service.delete()
         return redirect("services:service_list")
@@ -263,7 +263,7 @@ def kindofservice_delete(request, kind_id):
     kind = get_object_or_404(KindOfService, id=kind_id)
     if request.method == "POST":
         kind.delete()
-        return redirect("services:kindofservice_list")
+        return redirect("services:kindofservice")
     return render(request, "services/kindofservice/kindofservice_delete.html", {"client": kind})
 
 
