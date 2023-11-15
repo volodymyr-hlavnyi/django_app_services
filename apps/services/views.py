@@ -1,9 +1,5 @@
-# import logging
-
-from celery.result import AsyncResult
 from django.contrib.auth.decorators import login_required
 
-# from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
@@ -23,16 +19,17 @@ from apps.services.forms import (
 )
 
 from django.contrib.auth import login, logout
-from .forms import SignupForm, LoginForm
 
-import requests
+from .forms import SignupForm, LoginForm
 
 from .models.currency import CurrencyRate, RefOfCurrency
 from .models.userprofile import UserProfile
-from .additionally import get_currency_rate, add_suffix_to_duplicates, get_graph
-from .tasks import example_1
+from .additionally import add_suffix_to_duplicates, get_graph
 
 from django.contrib.auth import get_user_model
+
+# from core.celery import app as celery_app
+from .tasks import get_rate_currency_by_all
 
 User = get_user_model()
 
@@ -44,52 +41,6 @@ User = get_user_model()
 
 def home(request):
     return render(request, "services/home.html")
-
-
-def currency_view(request):
-    url = "https://bank.gov.ua/NBUStatService/v1/statdirectory/exchange?json"
-    response = requests.get(url)
-
-    if response.status_code != 200:
-        return render(
-            request, "services/currency/currency_template.html", {"error_message": "Не удалось получить доступ к API"}
-        )
-    exchange_rates = response.json()
-
-    # Получите список всех доступных валют
-    available_currencies = [currency["cc"] for currency in exchange_rates]
-
-    selected_currency = request.GET.get("currency", "USD")  # По умолчанию USD
-
-    # Проверьте, выбрана ли валюта из списка доступных
-    if selected_currency not in available_currencies:
-        return render(
-            request, "services/currency/currency_template.html", {"error_message": "Выбранной валюты нет в списке"}
-        )
-
-    currency_rate = next(
-        (currency["rate"] for currency in exchange_rates if currency["cc"] == selected_currency),
-        None,
-    )
-    try:
-        result: AsyncResult = example_1.delay("Hello, world!")
-    except Exception:
-        return render(
-            request,
-            "services/currency/currency_template.html",
-            {"error_message": "Не удалось получить доступ к Celery. Если запуск не в докере, то это нормально..."},
-        )
-
-    if currency_rate is not None:
-        context = {
-            "available_currencies": available_currencies,
-            "selected_currency": selected_currency,
-            "currency_rate": currency_rate,
-            "result_id": result.id,
-        }
-        return render(request, "services/currency/currency_template.html", context)
-    else:
-        return render(request, "services/currency/currency_template.html", {"error_message": "Курс валюты не найден"})
 
 
 def client_edit(request, client_id):
@@ -173,7 +124,7 @@ class ServiceListView(ListView):
 def action_list(request):
     # logger = logging.getLogger("django")
     request = request
-    rate = get_currency_rate()
+    rate = 39  # get_currency_rate()
 
     action_query = Action.objects.filter(user=request.user.id)
     time_query = action_query.values("service__time_hours")
@@ -378,6 +329,7 @@ def logout_view(request):
 
 
 class CurrencyRateListView(ListView):
+    result = get_rate_currency_by_all.delay()
     model = CurrencyRate
     context_object_name = "currencyrate_list"
     template_name = "services/currency/currencyrate_list.html"

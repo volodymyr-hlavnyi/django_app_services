@@ -1,13 +1,16 @@
-.PHONY: d-homework-i-run
+UID := $(shell id -u)
+export UID
+
+.PHONY: d-dev-i-run
 # Make all actions needed for run homework from zero.
-d-homework-i-run:
+d-dev-i-run:
 	@make init-configs &&\
 	make d-run
 
 
-.PHONY: d-homework-i-purge
+.PHONY: d-dev-i-purge
 # Make all actions needed for purge homework related data.
-d-homework-i-purge:
+d-dev-i-purge:
 	@make d-purge
 
 
@@ -25,6 +28,7 @@ d-run:
 		COMPOSE_PROFILES=full_dev \
 		docker compose \
 			up --build
+
 
 .PHONY: d-run-i-local-dev
 # Just run
@@ -69,14 +73,14 @@ init-dev:
 	pre-commit install
 
 
-.PHONY: homework-i-run
-# Run homework.
-homework-i-run:
+.PHONY: dev-i-run
+# Run dev project.
+dev-i-run:
 	@python run.py
 
 
-.PHONY: homework-i-purge
-homework-i-purge:
+.PHONY: dev-i-purge
+dev-i-purge:
 	@echo Goodbye
 
 
@@ -103,13 +107,14 @@ migrations:
 migrate:
 	@python manage.py migrate
 
-.PHONY: homework-i-run-generate-contacts
-# Run homework with generate 15 contacts.
-homework-i-run-generate-contacts:
+
+.PHONY: dev-i-run-generate-contacts
+# Run dev project with generate 15 contacts.
+dev-i-run-generate-contacts:
 	@bash ./scripts/d-homework-i-run-contacts-generate.sh
 
-.PHONY: homework-i-run-delete-contacts-all
-# Run homework with delete all contacts.
+.PHONY: dev-i-run-delete-contacts-all
+# Run dev project with delete all contacts.
 homework-i-run-delete-contacts-all:
 	@bash ./scripts/d-homework-i-run-contacts-delete-all.sh
 

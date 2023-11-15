@@ -160,19 +160,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CELERY_BROKER_URL = env.str("CELERY_BROKER_URL")
 
 CELERY_BEAT_SCHEDULE = {
-    "fetch-currency-every-24-hours": {
-        "task": "apps.services.tasks.currency.get_rate_currency",
-        "schedule": timedelta(seconds=30),  # Run every 5 minutes
+    "fetch-currency-every-1-hour": {
+        "task": "apps.services.tasks.currency.get_rate_currency_by_all",
+        "schedule": timedelta(hours=1),  # Run every 1 hour
     },
 }
 
 # 1
 # celery -A core worker --loglevel=info
-
-# CELERY_BEAT_SCHEDULE = {
-#     "test_task": {
-#         "task": "apps.services.tasks.example_2.example_2",
-#         "schedule": crontab(minute="*/1"),  # every minute
-#         # 'schedule': crontab(hour='*/21'),  # every 21 hour
-#     },
-# }
