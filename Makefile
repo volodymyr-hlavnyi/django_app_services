@@ -1,23 +1,23 @@
 UID := $(shell id -u)
 export UID
 
-.PHONY: d-dev-i-run
+.PHONY: d-work-i-run
 # Make all actions needed for run homework from zero.
-d-dev-i-run:
+d-work-i-run:
 	@make init-configs &&\
 	make d-run
 
 
-.PHONY: d-dev-i-purge
+.PHONY: d-work-i-purge
 # Make all actions needed for purge homework related data.
-d-dev-i-purge:
+d-work-i-purge:
 	@make d-purge
 
 
 .PHONY: init-configs
 # Configuration files initialization
 init-configs:
-	@cp .env.homework .env && \
+	@cp .env.dev .env && \
 	cp docker-compose.override.dev.yml docker-compose.override.yml
 
 
@@ -37,9 +37,6 @@ d-run-i-local-dev:
 		COMPOSE_PROFILES=local_dev \
 		docker compose \
 			up --build
-		COMPOSE_PROFILES=full_dev \
-		docker compose \
-			up --build
 
 
 .PHONY: d-run-i-pgadmin
@@ -47,6 +44,14 @@ d-run-i-local-dev:
 d-run-i-pgadmin:
 	@COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
 		COMPOSE_PROFILES=pgadmin \
+		docker compose \
+			up --build
+
+.PHONY: d-run-i-nginx
+# Run nginx
+d-run-i-nginx:
+	@COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 \
+		COMPOSE_PROFILES=full_dev \
 		docker compose \
 			up --build
 
@@ -149,3 +154,7 @@ init-dev-i-delete-superuser:
 #init-first-start-db:
 #	@python manage.py init_first_start
 
+.PHONY: d-dev-i-run-start-admin-add
+# Admin add in Docker
+d-dev-i-run-start-admin-add:
+	@bash ./scripts/d-dev-i-run-start-admin-add.sh

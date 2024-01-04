@@ -33,7 +33,7 @@ END
 
 until postgres_ready; do
   echo >&2 'PostgreSQL is unavailable (sleeping)...'
-  sleep 1
+  sleep 2
 done
 
 echo >&2 'PostgreSQL is up - continuing...'
