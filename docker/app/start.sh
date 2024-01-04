@@ -23,3 +23,9 @@ make migrate
 
 # Run application.
 python manage.py runserver 0.0.0.0:8000
+
+# Collect static files.
+# python manage.py collectstatic --noinput
+
+# Run Gunicorn.
+# exec gunicorn django_app_services.wsgi:application --bind 0.0.0.0:8000
